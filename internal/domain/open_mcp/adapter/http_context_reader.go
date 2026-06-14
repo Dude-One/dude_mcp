@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/trio/triov2-mcp/internal/domain/trio_mcp/entity"
+	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/entity"
 )
 
 // HTTPContextReader fetches context docs from a domain's /mcp/context endpoints.

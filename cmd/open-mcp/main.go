@@ -1,14 +1,14 @@
-// Trio MCP — single binary entry point.
+// Open MCP — single binary entry point.
 //
 // Usage:
 //
-//	triov2 server   — panel + admin HTTP server (:8080)
-//	triov2 mcp      — MCP JSON-RPC server (:8081)
-//	triov2 migrate  — apply schema and seed, then exit
+//	open-mcp server   — panel + admin HTTP server (:8080)
+//	open-mcp mcp      — MCP JSON-RPC server (:8081)
+//	open-mcp migrate  — apply schema and seed, then exit
 //
-// @title           TrioV2-MCP Panel API
+// @title           Open MCP Panel API
 // @version         1.0
-// @description     Mock identity provider and panel for Trio MCP (login, sessions, context notes, admin).
+// @description     Mock identity provider and panel for Open MCP (login, sessions, context notes, admin).
 //
 // @host      localhost:8080
 // @BasePath  /
@@ -29,21 +29,21 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	"github.com/trio/triov2-mcp/internal/domain/id"
-	"github.com/trio/triov2-mcp/internal/domain/id/adapter"
-	idmw "github.com/trio/triov2-mcp/internal/domain/id/middleware"
-	triomcp "github.com/trio/triov2-mcp/internal/domain/trio_mcp"
-	mcpadapter "github.com/trio/triov2-mcp/internal/domain/trio_mcp/adapter"
+	"github.com/open-mcp/open-mcp/internal/domain/id"
+	"github.com/open-mcp/open-mcp/internal/domain/id/adapter"
+	idmw "github.com/open-mcp/open-mcp/internal/domain/id/middleware"
+	openmcp "github.com/open-mcp/open-mcp/internal/domain/open_mcp"
+	mcpadapter "github.com/open-mcp/open-mcp/internal/domain/open_mcp/adapter"
 
-	_ "github.com/trio/triov2-mcp/docs"
-	_ "github.com/trio/triov2-mcp/internal/docs"
+	_ "github.com/open-mcp/open-mcp/docs"
+	_ "github.com/open-mcp/open-mcp/internal/docs"
 )
 
 func main() {
 	_ = godotenv.Load()
 
 	if len(os.Args) < 2 {
-		fmt.Fprintln(os.Stderr, "usage: triov2 <server|mcp|migrate>")
+		fmt.Fprintln(os.Stderr, "usage: open-mcp <server|mcp|migrate>")
 		os.Exit(1)
 	}
 
@@ -85,7 +85,7 @@ func runServer() {
 	if sourcesPath == "" {
 		sourcesPath = "./config/sources.yaml"
 	}
-	mcpMod, err := triomcp.NewModule(sourcesPath, db, idMod.AuthService())
+	mcpMod, err := openmcp.NewModule(sourcesPath, db, idMod.AuthService())
 	if err != nil {
 		log.Fatalf("init mcp module: %v", err)
 	}
@@ -107,9 +107,9 @@ func runServer() {
 
 	idMod.RegisterRoutes(r)
 
-	r.Static("/static/mcp", "./internal/domain/trio_mcp/view")
+	r.Static("/static/mcp", "./internal/domain/open_mcp/view")
 	r.GET("/admin", func(c *gin.Context) {
-		c.File("./internal/domain/trio_mcp/view/index.html")
+		c.File("./internal/domain/open_mcp/view/index.html")
 	})
 	r.NoRoute(func(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/admin")
@@ -156,7 +156,7 @@ func runServer() {
 		port = "8080"
 	}
 
-	log.Printf("TrioV2-MCP panel on :%s (swagger: http://localhost:%s/swagger/index.html)", port, port)
+	log.Printf("Open MCP panel on :%s (swagger: http://localhost:%s/swagger/index.html)", port, port)
 	log.Printf("Admin panel: http://localhost:%s/admin", port)
 	if err := r.Run(":" + port); err != nil {
 		log.Fatalf("server error: %v", err)
@@ -176,7 +176,7 @@ func runMCP() {
 		sourcesPath = "./config/sources.yaml"
 	}
 
-	mod, err := triomcp.NewModule(sourcesPath, db, idMod.AuthService())
+	mod, err := openmcp.NewModule(sourcesPath, db, idMod.AuthService())
 	if err != nil {
 		log.Fatalf("initialising MCP domain: %v", err)
 	}
@@ -223,7 +223,7 @@ func runMCP() {
 		port = "8081"
 	}
 
-	log.Printf("Trio MCP server on :%s  (sources: %s)", port, sourcesPath)
+	log.Printf("Open MCP server on :%s  (sources: %s)", port, sourcesPath)
 
 	httpServer := server.NewStreamableHTTPServer(mod.Server)
 	if err := httpServer.Start(":" + port); err != nil {
@@ -247,5 +247,5 @@ func runMigrate() {
 		log.Fatalf("seed: %v", err)
 	}
 
-	log.Println("done — trio_mcp_provider is ready")
+	log.Println("done — open_mcp_db is ready")
 }

@@ -1,4 +1,4 @@
-# TrioV2-MCP — TODO
+# Open MCP — TODO
 
 > Implementation order from Phase 0 → production.
 > DDD layout: `internal/domain/<name>/{entity,repository,service,adapter,delivery,wire.go}`
@@ -18,7 +18,7 @@
 ## Phase 1 — Identity panel ✅ DONE
 
 - [x] Panel auth — login, signup, logout, session cookie, context notes
-- [x] Postgres — tenants, users, user_sessions (schema: `trio_mcp_provider`)
+- [x] Postgres — tenants, users, user_sessions (schema: `open_mcp_db`)
 - [x] Swagger at `/swagger/doc.json`
 - [x] Seed context trees — `context/project_id/`, `context/project_infra/`
 - [x] DDD layout migration — `internal/domain/id/{entity,repository,service,adapter,delivery,wire.go}`
@@ -29,7 +29,7 @@
 
 ## Phase 2 — MCP platform ✅ DONE
 
-- [x] `config/sources.yaml` — trio-panel + trio-agentless registered
+- [x] `config/sources.yaml` — open-mcp-panel + open-mcp-agentless registered
 - [x] `.env` — MCP_PORT, SWAGGER_CACHE_TTL, PANEL_USERNAME/PASSWORD, AGENTLESS_COMPANY_ID
 - [x] `internal/domain/mcp/{entity,repository,service,adapter,delivery,wire.go}`
 - [x] 5 MCP tools: list_sources, get_api_spec, list_context_docs, read_context_doc, call_api
@@ -97,6 +97,6 @@
 |-----|--------|
 | [`Phase2_MCP_Plan.md`](./Phase2_MCP_Plan.md) | Review, decisions, resequenced build order |
 | [`PROJECT_CONTEXT_AI_DESIGN.md`](./PROJECT_CONTEXT_AI_DESIGN.md) | Full MCP design — registry, domain alignment, tools |
-| [`../TrioV2-Documents/Platform/MCP.md`](../TrioV2-Documents/Platform/MCP.md) | Platform-level MCP doc |
+| [`../Open MCP-Documents/Platform/MCP.md`](../Open MCP-Documents/Platform/MCP.md) | Platform-level MCP doc |
 | [`Trio_MCP_Protocol.md`](./Trio_MCP_Protocol.md) | IDE integration — transport, tools, config |
-| [`Trio MCP Server for IT Operations Management.md`](./Trio%20MCP%20Server%20for%20IT%20Operations%20Management.md) | End-state ITOM vision |
+| [`Open MCP Server for IT Operations Management.md`](./Trio%20MCP%20Server%20for%20IT%20Operations%20Management.md) | End-state ITOM vision |

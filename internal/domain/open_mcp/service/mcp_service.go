@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/trio/triov2-mcp/internal/domain/trio_mcp/entity"
+	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/entity"
 )
 
 // MCPService is the interface the delivery layer calls.

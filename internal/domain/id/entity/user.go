@@ -11,7 +11,7 @@ import (
 
 var usernamePattern = regexp.MustCompile(`^[a-zA-Z0-9_.]{3,32}$`)
 
-// User is the core identity stored in the mock IdP (trio_mcp_provider).
+// User is the core identity stored in the mock IdP (open_mcp_db).
 type User struct {
 	ID              uuid.UUID
 	TenantID        uuid.UUID
@@ -50,7 +50,7 @@ func NewPasswordUser(tenantID uuid.UUID, username, credential, displayName strin
 		Credential:      credential,
 		CredentialType:  CredentialTypePassword,
 		DisplayName:     displayName,
-		AllowedProjects: []string{"trio-mcp"},
+		AllowedProjects: []string{"open-mcp"},
 		Role:            RoleUser,
 		IsActive:        true,
 		CreatedAt:       now,

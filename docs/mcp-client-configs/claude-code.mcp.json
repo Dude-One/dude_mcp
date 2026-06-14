@@ -2,9 +2,9 @@
   "_comment": "Claude Code (CLI) MCP config — two options:",
   "_option_1": "Personal only: save to ~/.claude.json",
   "_option_2": "Shared with team: already provided as .mcp.json at project root (recommended)",
-  "_cli_command": "claude mcp add --transport http trio-mcp http://localhost:8081/mcp",
+  "_cli_command": "claude mcp add --transport http open-mcp http://localhost:8081/mcp",
   "mcpServers": {
-    "trio-mcp": {
+    "open-mcp": {
       "type": "http",
       "url": "http://localhost:8081/mcp"
     }

@@ -1,4 +1,4 @@
-module github.com/trio/triov2-mcp
+module github.com/open-mcp/open-mcp
 
 go 1.25.5
 

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/trio/triov2-mcp/internal/domain/id/entity"
-	"github.com/trio/triov2-mcp/internal/domain/id/repository"
+	"github.com/open-mcp/open-mcp/internal/domain/id/entity"
+	"github.com/open-mcp/open-mcp/internal/domain/id/repository"
 )
 
 // AuthServiceImpl wires panel session and user repositories.

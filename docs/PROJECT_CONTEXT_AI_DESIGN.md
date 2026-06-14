@@ -1,12 +1,12 @@
 # Project Context AI — Design Document
 
-> **TrioV2-MCP** — Platform MCP server that exposes Trio domain APIs and curated context to external LLM clients (Cursor, Claude Desktop, Codex, etc.).
+> **Open MCP** — Platform MCP server that exposes Open MCP domain APIs and curated context to external LLM clients (Cursor, Claude Desktop, Codex, etc.).
 
 ---
 
 ## Overview
 
-Trio MCP is a **deployed HTTP web service** (`cmd/mcp`). It does not embed an LLM. The user's IDE runs the LLM; MCP supplies **tools** so that LLM can:
+Open MCP is a **deployed HTTP web service** (`cmd/mcp`). It does not embed an LLM. The user's IDE runs the LLM; MCP supplies **tools** so that LLM can:
 
 1. **Discover APIs dynamically** — fetch each domain's OpenAPI/Swagger at runtime (routes stay up to date when services change).
 2. **Call live APIs** — devices online, assets, incidents, panel identity, etc.
@@ -14,7 +14,7 @@ Trio MCP is a **deployed HTTP web service** (`cmd/mcp`). It does not embed an LL
 
 **Yes — this is the right architecture.** Domain services own their HTTP routes and Swagger. MCP owns a **source registry** (config file) that points at each domain's swagger URL and context path. Adding a domain does not require new MCP tool code.
 
-Authoritative platform rules live in **`TrioV2-Documents/rules/`** (especially `00-trio-core.mdc`, `10-go-backend.mdc`, `13-docs.mdc`). Platform overview for MCP: [`TrioV2-Documents/Platform/MCP.md`](../TrioV2-Documents/Platform/MCP.md).
+Authoritative platform rules live in **`Open MCP-Documents/rules/`** (especially `00-trio-core.mdc`, `10-go-backend.mdc`, `13-docs.mdc`). Platform overview for MCP: [`Open MCP-Documents/Platform/MCP.md`](../Open MCP-Documents/Platform/MCP.md).
 
 ---
 
@@ -24,14 +24,14 @@ MCP is a **Platform** bounded context — an integration gateway, not a business
 
 ### Business domain hierarchy
 
-Registry entries map to official Trio domains (from `00-trio-core.mdc`). Use `platform_domain` as the stable key; `name` is the MCP tool identifier for a specific deployable service.
+Registry entries map to official Open MCP domains (from `00-trio-core.mdc`). Use `platform_domain` as the stable key; `name` is the MCP tool identifier for a specific deployable service.
 
 | `platform_domain` | Trio docs folder | Owns | Example MCP `name` |
 |-------------------|------------------|------|---------------------|
 | `tenant` | `Tenant/` | Organizations, billing scope | (via ID session) |
-| `id` | `ID/` | Auth, users, MFA, ACL, panel sessions | `trio-panel` |
+| `id` | `ID/` | Auth, users, MFA, ACL, panel sessions | `open-mcp-panel` |
 | `device` | `Device/` | Enrollment, telemetry, commands | (future) |
-| `infra` | Infra / Server Management | Devices, assets, playbooks | `trio-servermanagement` |
+| `infra` | Infra / Server Management | Devices, assets, playbooks | `open-mcp-servermanagement` |
 | `notification` | `Notification/` | Alerts, channels | (future) |
 
 Context trees use **`context/project_{platform_domain}/`** — e.g. `project_id/`, `project_infra/` — not ad-hoc product codenames.
@@ -43,7 +43,7 @@ Context trees use **`context/project_{platform_domain}/`** — e.g. `project_id/
 | No Go imports from CoreBackEndApp | MCP calls domain services over **HTTP only** |
 | Schema-per-domain Postgres | MCP DB holds **ID/panel** data only (sessions, users); no cross-schema joins to Infra/Device |
 | APIs as contracts | Swagger URL + `base_url` in registry; routes discovered at runtime |
-| Docs in `TrioV2-Documents/<Domain>/` | Technical `.md` = engineering; MCP `context/` = IDE-oriented summaries that link to authoritative docs |
+| Docs in `Open MCP-Documents/<Domain>/` | Technical `.md` = engineering; MCP `context/` = IDE-oriented summaries that link to authoritative docs |
 
 ### Code layout (target — `10-go-backend.mdc`)
 
@@ -104,7 +104,7 @@ This is the **router** for MCP. Update this file to register new domains; MCP to
 
 sources:
   # --- API source: ID domain (panel) ---
-  - name: trio-panel
+  - name: open-mcp-panel
     platform_domain: id
     description: |
       Identity panel (ID domain). Login, sessions, user profile, allowed projects,
@@ -118,7 +118,7 @@ sources:
       token_env: PANEL_SERVICE_TOKEN          # server-side env only
 
   # --- API source: Infra domain (server management) ---
-  - name: trio-servermanagement
+  - name: open-mcp-servermanagement
     platform_domain: infra
     description: |
       Server and device management (Infra). Devices, assets, playbooks, provisioning.
@@ -133,7 +133,7 @@ sources:
       value_env: SM_API_KEY
 
   # --- Context-only source (docs without a separate API yet) ---
-  - name: trio-servermanagement-docs
+  - name: open-mcp-servermanagement-docs
     platform_domain: infra
     description: |
       Curated guides and architecture for server management.
@@ -147,8 +147,8 @@ sources:
 
 | Field | Required | Purpose |
 |-------|----------|---------|
-| `name` | yes | Unique id for MCP tools (`get_api_spec("trio-panel")`) |
-| `platform_domain` | yes | Official Trio domain key: `id`, `infra`, `device`, `tenant`, … |
+| `name` | yes | Unique id for MCP tools (`get_api_spec("open-mcp-panel")`) |
+| `platform_domain` | yes | Official Open MCP domain key: `id`, `infra`, `device`, `tenant`, … |
 | `description` | yes | **Domain docstring** — shown to the LLM in `list_sources`; explains when to use this domain |
 | `type` | yes | `api` or `context` |
 | `base_url` | yes | Service root URL — used for both Swagger fetch and context fetch |
@@ -156,7 +156,7 @@ sources:
 | `context_path` | optional | Standard path to context docs: `GET {base_url}{context_path}/{file}` |
 | `auth` | api only | How MCP authenticates to the downstream service (env vars, never in IDE config) |
 
-**Standard path convention** — all Trio services must expose:
+**Standard path convention** — all Open MCP services must expose:
 
 | Resource | Endpoint |
 |----------|----------|
@@ -165,7 +165,7 @@ sources:
 | Context file | `GET /mcp/context/{path}` → markdown/text content |
 
 **Per-domain description** lives in `sources.yaml` (`description:` block).
-**Per-domain context docs** live on the domain service itself, served at `GET /mcp/context/{path}`. Authoritative engineering specs remain in `TrioV2-Documents/<Domain>/`.
+**Per-domain context docs** live on the domain service itself, served at `GET /mcp/context/{path}`. Authoritative engineering specs remain in `Open MCP-Documents/<Domain>/`.
 
 Later: move registry to Postgres + panel admin UI so domains can be added without redeploy.
 
@@ -175,7 +175,7 @@ Later: move registry to Postgres + panel admin UI so domains can be added withou
 
 Context docs are **owned and served by each domain service** — not stored on the MCP server disk. MCP fetches them over HTTP with the same cache-TTL mechanism as Swagger. Domain teams update their docs by redeploying (or mounting a volume). MCP never needs to redeploy for doc changes.
 
-**Standard convention** — every Trio service implements:
+**Standard convention** — every Open MCP service implements:
 
 ```
 GET /mcp/context            → JSON: ["README.md", "guides/devices.md", ...]
@@ -184,7 +184,7 @@ GET /mcp/context/{path}     → raw markdown/text
 
 The panel serves files from `context/project_id/` at this route. Infra serves from its equivalent directory.
 
-**What to put in context docs** — not a copy of Swagger, not `TrioV2-Documents/`:
+**What to put in context docs** — not a copy of Swagger, not `Open MCP-Documents/`:
 
 | File | Purpose |
 |------|---------|
@@ -250,16 +250,16 @@ flowchart TB
 
 The LLM flow for "how many devices are online?":
 
-1. `list_sources` → pick `trio-servermanagement`
+1. `list_sources` → pick `open-mcp-servermanagement`
 2. `read_context("infra", "guides/devices.md")` → learn status semantics (optional)
-3. `get_api_spec("trio-servermanagement")` → discover `GET /devices`
-4. `call_api("trio-servermanagement", "GET", "/devices", {"status": "online"})` → live data
+3. `get_api_spec("open-mcp-servermanagement")` → discover `GET /devices`
+4. `call_api("open-mcp-servermanagement", "GET", "/devices", {"status": "online"})` → live data
 
 ---
 
 ## DDD mapping — Platform `mcp` + `id` bounded contexts
 
-Two bounded contexts in this repo, aligned with Trio domain boundaries:
+Two bounded contexts in this repo, aligned with Open MCP domain boundaries:
 
 | Bounded context | Trio `platform_domain` | Responsibility |
 |-----------------|------------------------|----------------|
@@ -333,7 +333,7 @@ Keep ports for a future optional REST `/context-ai/.../ask` if needed; not Phase
 - **Read-only API first**: `call_api` for GET/HEAD only in Phase 1; write tools require explicit allowlist.
 - **Audit**: log `source`, `method`, `path`, `user_id` on every `call_api`.
 
-See [`Trio MCP Server for IT Operations Management.md`](./Trio%20MCP%20Server%20for%20IT%20Operations%20Management.md) for ITOM tool naming (`itom.asset.get_health`, etc.) — optional named wrappers on top of generic `call_api`.
+See [`Open MCP Server for IT Operations Management.md`](./Trio%20MCP%20Server%20for%20IT%20Operations%20Management.md) for ITOM tool naming (`itom.asset.get_health`, etc.) — optional named wrappers on top of generic `call_api`.
 
 ---
 
@@ -352,7 +352,7 @@ Downstream service tokens: `PANEL_SERVICE_TOKEN`, `SM_API_KEY`, etc. (per regist
 
 ## Implementation order
 
-1. **`config/sources.yaml`** — register `trio-panel` with `platform_domain: id`, `swagger_path: /swagger/doc.json`, `context_path: /mcp/context`.
+1. **`config/sources.yaml`** — register `open-mcp-panel` with `platform_domain: id`, `swagger_path: /swagger/doc.json`, `context_path: /mcp/context`.
 2. **`internal/domain/mcp/`** (or transitional `core/mcp/`) — entity, service, adapters.
 3. **YAML registry + HTTP swagger reader** (cache TTL) + HTTP API caller.
 4. **HTTP context reader** — `GET base_url + context_path` and `GET base_url + context_path/{file}`; same TTL as Swagger.

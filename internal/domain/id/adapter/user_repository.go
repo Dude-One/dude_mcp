@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/lib/pq"
-	"github.com/trio/triov2-mcp/internal/domain/id/entity"
+	"github.com/open-mcp/open-mcp/internal/domain/id/entity"
 	"gorm.io/gorm"
 )
 

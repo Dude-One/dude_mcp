@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/trio/triov2-mcp/internal/domain/id/entity"
+	"github.com/open-mcp/open-mcp/internal/domain/id/entity"
 )
 
 // AuthService is the application port for panel login and context notes.

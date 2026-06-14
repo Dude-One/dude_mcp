@@ -23,7 +23,7 @@ func RegisterRoutes(r gin.IRouter, panel *PanelHandler, ctx *ContextHandler) {
 		panelAPI.PUT("/context-notes", panel.SaveContextNotes)
 	}
 
-	// Standard Trio context convention — MCP fetches docs from these routes.
+	// Standard Open MCP context convention — MCP fetches docs from these routes.
 	r.GET("/mcp/context", ctx.ListContext)
 	r.GET("/mcp/context/*path", ctx.ReadContext)
 }

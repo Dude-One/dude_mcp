@@ -1,4 +1,4 @@
-# Trio MCP — domain source registry
+# Open MCP — domain source registry
 # Copy to sources.yaml and adjust URLs/auth env vars.
 # MCP reads this at startup; add domains here without changing MCP tool code.
 # platform_domain must match Trio hierarchy: id, infra, device, tenant, ...
@@ -13,7 +13,7 @@
 #   query_param — append a fixed query param (e.g. ?company_id=X) on every call
 
 sources:
-  - name: trio-panel
+  - name: open-mcp-panel
     platform_domain: id
     description: |
       Identity panel (ID domain). Login, sessions, user profile, allowed projects,
@@ -28,7 +28,7 @@ sources:
       username_env: PANEL_SERVICE_USERNAME
       password_env: PANEL_SERVICE_PASSWORD
 
-  - name: trio-servermanagement
+  - name: open-mcp-servermanagement
     platform_domain: infra
     description: |
       Server and device management (Infra). Devices, assets, playbooks, provisioning.
@@ -42,7 +42,7 @@ sources:
       param_name: company_id
       value_env: SM_COMPANY_ID
 
-  - name: trio-servermanagement-docs
+  - name: open-mcp-servermanagement-docs
     platform_domain: infra
     description: |
       Curated guides and architecture for server management.

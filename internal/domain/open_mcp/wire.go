@@ -1,6 +1,6 @@
-// Package triomcp is the MCP platform domain: source registry, swagger discovery,
+// Package openmcp is the MCP platform domain: source registry, swagger discovery,
 // context doc serving, and API proxy. It assembles its own dependency graph.
-package triomcp
+package openmcp
 
 import (
 	"context"
@@ -11,11 +11,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/mark3labs/mcp-go/server"
-	"github.com/trio/triov2-mcp/internal/domain/id/middleware"
-	"github.com/trio/triov2-mcp/internal/domain/id/service"
-	"github.com/trio/triov2-mcp/internal/domain/trio_mcp/adapter"
-	"github.com/trio/triov2-mcp/internal/domain/trio_mcp/delivery"
-	triomcpservice "github.com/trio/triov2-mcp/internal/domain/trio_mcp/service"
+	"github.com/open-mcp/open-mcp/internal/domain/id/middleware"
+	"github.com/open-mcp/open-mcp/internal/domain/id/service"
+	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/adapter"
+	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/delivery"
+	openmcpservice "github.com/open-mcp/open-mcp/internal/domain/open_mcp/service"
 	"gorm.io/gorm"
 )
 
@@ -62,7 +62,7 @@ func NewModule(sourcesPath string, db *gorm.DB, authSvc service.AuthService) (*M
 	contextReader := adapter.NewHTTPContextReader()
 	apiCaller := adapter.NewHTTPAPICaller()
 
-	svc := triomcpservice.NewMCPService(dbReg, swaggerReader, contextReader, apiCaller)
+	svc := openmcpservice.NewMCPService(dbReg, swaggerReader, contextReader, apiCaller)
 	handlers := delivery.NewHandlers(svc)
 	mcpServer := delivery.NewMCPServer(handlers)
 

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/trio/triov2-mcp/internal/domain/trio_mcp/entity"
+	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/entity"
 )
 
 // SourceRegistry lists and looks up registered domain sources.

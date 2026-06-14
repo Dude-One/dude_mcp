@@ -1,4 +1,4 @@
-# Trio MCP — Observability Panel
+# Open MCP — Observability Panel
 
 > **Pattern:** Tee on LLM stream → Event Bus → SSE → Admin Panel  
 > **Visibility:** REST gate + MCP gate (repo-native gate is invisible — direct disk read)  
@@ -110,7 +110,7 @@ Keep the domain clean — publish through a port, never import a concrete bus in
 ```go
 package ports
 
-import "github.com/yourorg/triov2/core/domain/events"
+import "github.com/yourorg/open-mcp/core/domain/events"
 
 // EventBus is the port for publishing domain observation events.
 // The core never depends on the concrete implementation.
@@ -136,7 +136,7 @@ package eventbus
 import (
     "sync"
 
-    "github.com/yourorg/triov2/core/domain/events"
+    "github.com/yourorg/open-mcp/core/domain/events"
 )
 
 type MemoryEventBus struct {
@@ -353,7 +353,7 @@ import (
 
     "github.com/gin-gonic/gin"
     "github.com/google/uuid"
-    "github.com/yourorg/triov2/adapters/eventbus"
+    "github.com/yourorg/open-mcp/adapters/eventbus"
 )
 
 type AdminEventsHandler struct {

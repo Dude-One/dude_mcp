@@ -5,10 +5,10 @@ package id
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/trio/triov2-mcp/internal/domain/id/adapter"
-	"github.com/trio/triov2-mcp/internal/domain/id/delivery"
-	idmiddleware "github.com/trio/triov2-mcp/internal/domain/id/middleware"
-	"github.com/trio/triov2-mcp/internal/domain/id/service"
+	"github.com/open-mcp/open-mcp/internal/domain/id/adapter"
+	"github.com/open-mcp/open-mcp/internal/domain/id/delivery"
+	idmiddleware "github.com/open-mcp/open-mcp/internal/domain/id/middleware"
+	"github.com/open-mcp/open-mcp/internal/domain/id/service"
 	"gorm.io/gorm"
 )
 

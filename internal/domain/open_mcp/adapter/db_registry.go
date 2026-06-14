@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/trio/triov2-mcp/internal/domain/trio_mcp/entity"
+	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/entity"
 	"gorm.io/gorm"
 )
 

@@ -31,8 +31,8 @@ definitions:
     properties:
       allowed_projects:
         example:
-        - trio-mcp
-        - trio-servermanagement
+        - open-mcp
+        - open-mcp-servermanagement
         items:
           type: string
         type: array
@@ -67,7 +67,7 @@ definitions:
         example: ok
         type: string
     type: object
-  github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.AuthConfig:
+  github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.AuthConfig:
     properties:
       loginPath:
         description: 'password: e.g. /panel/login'
@@ -79,7 +79,7 @@ definitions:
         description: 'password: env var holding the password'
         type: string
       type:
-        $ref: '#/definitions/github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.AuthType'
+        $ref: '#/definitions/github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.AuthType'
       usernameEnv:
         description: 'password: env var holding the username'
         type: string
@@ -87,7 +87,7 @@ definitions:
         description: 'query_param: env var holding the value, e.g. AGENTLESS_COMPANY_ID'
         type: string
     type: object
-  github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.AuthType:
+  github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.AuthType:
     enum:
     - password
     - query_param
@@ -95,10 +95,10 @@ definitions:
     x-enum-varnames:
     - AuthTypePassword
     - AuthTypeQueryParam
-  github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.Source:
+  github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.Source:
     properties:
       auth:
-        $ref: '#/definitions/github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.AuthConfig'
+        $ref: '#/definitions/github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.AuthConfig'
       baseURL:
         type: string
       contextPath:
@@ -115,9 +115,9 @@ definitions:
         description: e.g. /swagger/doc.json
         type: string
       type:
-        $ref: '#/definitions/github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.SourceType'
+        $ref: '#/definitions/github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.SourceType'
     type: object
-  github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.SourceType:
+  github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.SourceType:
     enum:
     - api
     - context
@@ -128,9 +128,9 @@ definitions:
 host: localhost:8080
 info:
   contact: {}
-  description: Mock identity provider and panel for Trio MCP (login, sessions, context
+  description: Mock identity provider and panel for Open MCP (login, sessions, context
     notes, admin).
-  title: TrioV2-MCP Panel API
+  title: Open MCP Panel API
   version: "1.0"
 paths:
   /admin/sources:
@@ -142,7 +142,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.Source'
+              $ref: '#/definitions/github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.Source'
             type: array
       summary: List all sources
       tags:
@@ -316,7 +316,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Authenticates against the mock IdP. Sets trio_session cookie.
+      description: Authenticates against the mock IdP. Sets open_mcp_session cookie.
       parameters:
       - description: Login credentials
         in: body
@@ -344,7 +344,7 @@ paths:
       - panel
   /panel/logout:
     post:
-      description: Revokes the trio_session cookie.
+      description: Revokes the open_mcp_session cookie.
       produces:
       - application/json
       responses:
@@ -357,7 +357,7 @@ paths:
       - panel
   /panel/me:
     get:
-      description: Returns identity from the active trio_session cookie.
+      description: Returns identity from the active open_mcp_session cookie.
       produces:
       - application/json
       responses:

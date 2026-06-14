@@ -11,7 +11,7 @@ import (
 )
 
 // ContextHandler serves the domain context docs at GET /mcp/context and
-// GET /mcp/context/{path}. It implements the standard Trio context convention
+// GET /mcp/context/{path}. It implements the standard Open MCP context convention
 // so MCP can discover and fetch docs the same way it fetches Swagger.
 type ContextHandler struct {
 	root string // absolute or relative path to the context directory

@@ -1,6 +1,6 @@
 # AI Observability — DDD Design Document
 
-> **TrioV2-MCP** — Separate bounded context for capturing, storing, and streaming AI interaction traces.
+> **Open MCP** — Separate bounded context for capturing, storing, and streaming AI interaction traces.
 
 ---
 

@@ -24,7 +24,7 @@ type PanelMeResponse struct {
 	TenantID        string   `json:"tenant_id" example:"00000000-0000-4000-8000-000000000001"`
 	Username        string   `json:"username" example:"admin"`
 	DisplayName     string   `json:"display_name" example:"Admin User"`
-	AllowedProjects []string `json:"allowed_projects" example:"trio-mcp,trio-servermanagement"`
+	AllowedProjects []string `json:"allowed_projects" example:"open-mcp,open-mcp-servermanagement"`
 }
 
 type ContextNotesResponse struct {

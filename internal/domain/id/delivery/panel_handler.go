@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/trio/triov2-mcp/internal/domain/id/service"
+	"github.com/open-mcp/open-mcp/internal/domain/id/service"
 )
 
 // PanelHandler manages panel browser sessions.
@@ -19,7 +19,7 @@ func NewPanelHandler(svc service.AuthService) *PanelHandler {
 
 // Login godoc
 // @Summary      Panel login
-// @Description  Authenticates against the mock IdP. Sets trio_session cookie.
+// @Description  Authenticates against the mock IdP. Sets open_mcp_session cookie.
 // @Tags         panel
 // @Accept       json
 // @Produce      json
@@ -44,7 +44,7 @@ func (h *PanelHandler) Login(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("trio_session", sessionToken, int(24*time.Hour/time.Second), "/", "", false, true)
+	c.SetCookie("open_mcp_session", sessionToken, int(24*time.Hour/time.Second), "/", "", false, true)
 	c.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
@@ -80,35 +80,35 @@ func (h *PanelHandler) SignUp(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("trio_session", sessionToken, int(24*time.Hour/time.Second), "/", "", false, true)
+	c.SetCookie("open_mcp_session", sessionToken, int(24*time.Hour/time.Second), "/", "", false, true)
 	c.JSON(http.StatusCreated, gin.H{"status": "ok"})
 }
 
 // Logout godoc
 // @Summary      Panel logout
-// @Description  Revokes the trio_session cookie.
+// @Description  Revokes the open_mcp_session cookie.
 // @Tags         panel
 // @Produce      json
 // @Success      200  {object}  docs.StatusResponse
 // @Router       /panel/logout [post]
 func (h *PanelHandler) Logout(c *gin.Context) {
-	if token, err := c.Cookie("trio_session"); err == nil && token != "" {
+	if token, err := c.Cookie("open_mcp_session"); err == nil && token != "" {
 		_ = h.svc.Logout(c.Request.Context(), token)
 	}
-	c.SetCookie("trio_session", "", -1, "/", "", false, true)
+	c.SetCookie("open_mcp_session", "", -1, "/", "", false, true)
 	c.JSON(http.StatusOK, gin.H{"status": "logged out"})
 }
 
 // Me godoc
 // @Summary      Current panel user
-// @Description  Returns identity from the active trio_session cookie.
+// @Description  Returns identity from the active open_mcp_session cookie.
 // @Tags         panel
 // @Produce      json
 // @Success      200  {object}  docs.PanelMeResponse
 // @Failure      401  {object}  docs.ErrorResponse
 // @Router       /panel/me [get]
 func (h *PanelHandler) Me(c *gin.Context) {
-	token, err := c.Cookie("trio_session")
+	token, err := c.Cookie("open_mcp_session")
 	if err != nil || token == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "not logged in"})
 		return
@@ -137,7 +137,7 @@ func (h *PanelHandler) Me(c *gin.Context) {
 // @Failure      401  {object}  docs.ErrorResponse
 // @Router       /panel/context-notes [get]
 func (h *PanelHandler) GetContextNotes(c *gin.Context) {
-	token, err := c.Cookie("trio_session")
+	token, err := c.Cookie("open_mcp_session")
 	if err != nil || token == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "not logged in"})
 		return
@@ -162,7 +162,7 @@ func (h *PanelHandler) GetContextNotes(c *gin.Context) {
 // @Failure      401   {object}  docs.ErrorResponse
 // @Router       /panel/context-notes [put]
 func (h *PanelHandler) SaveContextNotes(c *gin.Context) {
-	token, err := c.Cookie("trio_session")
+	token, err := c.Cookie("open_mcp_session")
 	if err != nil || token == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "not logged in"})
 		return

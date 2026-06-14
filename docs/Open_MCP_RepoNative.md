@@ -1,4 +1,4 @@
-# Trio MCP — Repo-Native Integration (Cursor IDE)
+# Open MCP — Repo-Native Integration (Cursor IDE)
 
 > **Gate:** Direct file read — no server, no network  
 > **Transport:** Filesystem  
@@ -15,7 +15,7 @@ Cursor then injects the relevant docs into its prompts **automatically** — wit
 ```
 Developer opens Cursor in the repo
     → Cursor reads AGENTS.md at repo root
-    → Finds pointer to context/project_trio-servermanagement/
+    → Finds pointer to context/project_open-mcp-servermanagement/
     → Injects relevant .md files into its context window
     → Developer asks a question → Cursor answers from your docs
 ```
@@ -35,14 +35,14 @@ Cursor reads this file to understand the project structure and where documentati
 # Trio Project — Agent Context
 
 ## Project Overview
-This repository contains the TrioV2 business logic service built with hexagonal (DDD)
+This repository contains the Open MCP business logic service built with hexagonal (DDD)
 architecture in Go. It manages server provisioning, playbooks, device management,
 and project-scoped AI knowledge.
 
 ## Documentation Structure
 All project documentation lives under `context/`:
 
-- `context/project_trio-servermanagement/` — Server management domain docs
+- `context/project_open-mcp-servermanagement/` — Server management domain docs
   - `README.md` — Project overview and quickstart
   - `architecture/` — System design, DDD mapping, data flow diagrams
   - `api/` — REST endpoint references and OpenAPI specs
@@ -84,13 +84,13 @@ under context/project_{Name}/ and exposes it to AI tools via REST API, MCP
 protocol, and repo-native file context.
 
 ## Primary documentation
-context/project_trio-servermanagement/README.md
-context/project_trio-servermanagement/architecture/overview.md
-context/project_trio-servermanagement/api/endpoints.md
-context/project_trio-servermanagement/guides/
+context/project_open-mcp-servermanagement/README.md
+context/project_open-mcp-servermanagement/architecture/overview.md
+context/project_open-mcp-servermanagement/api/endpoints.md
+context/project_open-mcp-servermanagement/guides/
 
 ## OpenAPI spec
-context/project_trio-servermanagement/api/openapi.yaml
+context/project_open-mcp-servermanagement/api/openapi.yaml
 
 ## Source layout
 core/domain/entities/   — domain entities
@@ -116,7 +116,7 @@ Create and populate this tree. Cursor will read these files automatically.
 
 ```
 context/
-  project_trio-servermanagement/
+  project_open-mcp-servermanagement/
     README.md                        ← copied/linked from repo root README
     architecture/
       overview.md                    ← DDD mapping, hexagonal wiring diagram
@@ -142,17 +142,17 @@ Populate the context tree by copying existing repo docs:
 
 ```powershell
 # Create the directory tree
-New-Item -ItemType Directory -Path "context\project_trio-servermanagement\architecture" -Force
-New-Item -ItemType Directory -Path "context\project_trio-servermanagement\api" -Force
-New-Item -ItemType Directory -Path "context\project_trio-servermanagement\guides" -Force
-New-Item -ItemType Directory -Path "context\project_trio-servermanagement\examples" -Force
+New-Item -ItemType Directory -Path "context\project_open-mcp-servermanagement\architecture" -Force
+New-Item -ItemType Directory -Path "context\project_open-mcp-servermanagement\api" -Force
+New-Item -ItemType Directory -Path "context\project_open-mcp-servermanagement\guides" -Force
+New-Item -ItemType Directory -Path "context\project_open-mcp-servermanagement\examples" -Force
 
 # Copy root README as the project overview
-Copy-Item README.md "context\project_trio-servermanagement\README.md"
+Copy-Item README.md "context\project_open-mcp-servermanagement\README.md"
 
 # Copy existing docs if they exist
-Copy-Item docs\* "context\project_trio-servermanagement\guides\" -Recurse -ErrorAction SilentlyContinue
-Copy-Item examples\*.yaml "context\project_trio-servermanagement\examples\" -ErrorAction SilentlyContinue
+Copy-Item docs\* "context\project_open-mcp-servermanagement\guides\" -Recurse -ErrorAction SilentlyContinue
+Copy-Item examples\*.yaml "context\project_open-mcp-servermanagement\examples\" -ErrorAction SilentlyContinue
 ```
 
 ---

@@ -1,9 +1,9 @@
-# TrioV2-MCP
+# Open MCP
 
-Identity panel + **platform MCP server** for Trio domains.
+Identity panel + **platform MCP server** for Open MCP domains.
 
 The **panel** (`cmd/server`) handles login, sessions, and context notes.
-The **MCP server** (`cmd/mcp`, planned) exposes Trio domain APIs and curated docs to IDE LLM clients (Cursor, Claude Desktop, Codex) over HTTP JSON-RPC 2.0.
+The **MCP server** (`cmd/mcp`, planned) exposes Open MCP domain APIs and curated docs to IDE LLM clients (Cursor, Claude Desktop, Codex) over HTTP JSON-RPC 2.0.
 
 ---
 
@@ -40,7 +40,7 @@ Full design: [`docs/PROJECT_CONTEXT_AI_DESIGN.md`](docs/PROJECT_CONTEXT_AI_DESIG
 
 ```powershell
 copy .env.example .env
-docker compose up -d trio-mcp-provider-db
+docker compose up -d open-mcp-db
 go mod tidy
 go run ./cmd/server
 ```
@@ -48,9 +48,9 @@ go run ./cmd/server
 - **Panel UI:** http://localhost:8080/
 - **Panel Swagger:** http://localhost:8080/swagger/index.html
 - **Login:** `admin` / `admin`
-- **Postgres:** `localhost:5433` / database `trio_mcp_provider`
+- **Postgres:** `localhost:5433` / database `open_mcp_db`
 
-Or use **Trio MCP: Server** from Run and Debug (F5) after the DB container is up.
+Or use **Open MCP: Server** from Run and Debug (F5) after the DB container is up.
 
 ---
 
@@ -86,7 +86,7 @@ go run ./cmd/mcp
 
 | Method | Path | Purpose |
 |--------|------|---------|
-| `POST` | `/panel/login` | Login; sets `trio_session` cookie |
+| `POST` | `/panel/login` | Login; sets `open_mcp_session` cookie |
 | `POST` | `/panel/signup` | Register on default tenant |
 | `POST` | `/panel/logout` | Revoke session |
 | `GET` | `/panel/me` | Current user identity |
@@ -96,7 +96,7 @@ go run ./cmd/mcp
 | `GET` | `/mcp/context` | Context doc listing → JSON array (fetched by MCP `list_context`) |
 | `GET` | `/mcp/context/{path}` | One context doc → markdown (fetched by MCP `read_context`) |
 
-The last two routes implement the **standard Trio context convention**. Every domain service exposes the same two paths so MCP can discover and fetch context docs without knowing where they are stored. Domain teams update their docs by redeploying their service — MCP needs no changes.
+The last two routes implement the **standard Open MCP context convention**. Every domain service exposes the same two paths so MCP can discover and fetch context docs without knowing where they are stored. Domain teams update their docs by redeploying their service — MCP needs no changes.
 
 Regenerate Swagger after handler changes:
 
@@ -106,9 +106,9 @@ swag init -g cmd/server/main.go -o docs --parseDependency --parseInternal
 
 ---
 
-## Standard Trio service convention
+## Standard Open MCP service convention
 
-Every Trio domain service must expose these two paths so MCP can work without configuration changes:
+Every Open MCP domain service must expose these two paths so MCP can work without configuration changes:
 
 | Path | Returns | Purpose |
 |------|---------|---------|
@@ -132,7 +132,7 @@ The panel (`cmd/server`) implements all three. Infra and other domain services m
 
 ## Project layout
 
-DDD layout per `TrioV2-Documents/rules/10-go-backend.mdc` — one folder per domain
+DDD layout per `Open MCP-Documents/rules/10-go-backend.mdc` — one folder per domain
 under `internal/domain/<name>/`, Go's `internal/` enforcing privacy.
 
 ```
@@ -162,7 +162,7 @@ docs/                Generated swagger spec (docs.go) + design documents + TODO
 
 web/panel/           Login UI
 
-TrioV2-Documents/    Authoritative platform docs (rules, domain specs)
+Open MCP-Documents/    Authoritative platform docs (rules, domain specs)
 ```
 
 ---

@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/trio/triov2-mcp/internal/domain/id/entity"
+	"github.com/open-mcp/open-mcp/internal/domain/id/entity"
 )
 
 // UserRepository fetches users from the mock IdP store.

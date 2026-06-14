@@ -1,4 +1,4 @@
-# Trio MCP — OpenAI / ChatGPT Integration
+# Open MCP — OpenAI / ChatGPT Integration
 
 > **Gate:** REST API → ChatGPT Custom GPT Actions  
 > **Transport:** HTTPS (plain HTTP POST/GET)  
@@ -45,7 +45,7 @@ openapi: 3.1.0
 info:
   title: Trio Context AI
   description: >
-    Knowledge assistant for Trio projects. Ask questions about project
+    Knowledge assistant for Open MCP projects. Ask questions about project
     documentation, architecture, APIs, and playbooks. Returns answers
     with cited source documents.
   version: 1.0.0
@@ -75,7 +75,7 @@ paths:
                     type: array
                     items:
                       type: string
-                    example: ["trio-servermanagement", "trio-billing"]
+                    example: ["open-mcp-servermanagement", "trio-billing"]
 
   /context-ai/projects/{name}/documents:
     get:
@@ -89,7 +89,7 @@ paths:
         - name: name
           in: path
           required: true
-          description: Project name (e.g. "trio-servermanagement")
+          description: Project name (e.g. "open-mcp-servermanagement")
           schema:
             type: string
       responses:
@@ -122,7 +122,7 @@ paths:
         - name: name
           in: path
           required: true
-          description: Project name (e.g. "trio-servermanagement")
+          description: Project name (e.g. "open-mcp-servermanagement")
           schema:
             type: string
       requestBody:
@@ -137,7 +137,7 @@ paths:
                 question:
                   type: string
                   description: The user's question in natural language
-                  example: "How do I create a new server in trio-servermanagement?"
+                  example: "How do I create a new server in open-mcp-servermanagement?"
                 max_sources:
                   type: integer
                   description: Max number of source documents to include (default 5)
@@ -295,7 +295,7 @@ Always include the "sources" paths so the user knows where the information came 
 
 **Request:**
 ```http
-POST /context-ai/projects/trio-servermanagement/ask
+POST /context-ai/projects/open-mcp-servermanagement/ask
 X-API-Key: sk-xxx
 Content-Type: application/json
 
@@ -308,7 +308,7 @@ Content-Type: application/json
 **Response:**
 ```json
 {
-  "answer": "To provision a new server in trio-servermanagement, follow these steps: ...",
+  "answer": "To provision a new server in open-mcp-servermanagement, follow these steps: ...",
   "sources": [
     { "path": "guides/provisioning.md", "title": "Server Provisioning Guide" },
     { "path": "examples/create-server.yaml", "title": "Create Server Playbook" }
