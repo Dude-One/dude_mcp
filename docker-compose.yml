@@ -1,0 +1,69 @@
+# TrioV2-MCP — panel server + MCP server + database
+#
+# Start everything:
+#   docker compose up -d --build
+#
+# DB only:
+#   docker compose up -d trio-mcp-provider-db
+#
+# Rebuild after code changes:
+#   docker compose up -d --build trio-mcp-server trio-mcp-mcp
+
+services:
+  trio-mcp-provider-db:
+    build:
+      context: ./infra/auth-db
+      dockerfile: Dockerfile
+    container_name: trio-mcp-provider-db
+    restart: unless-stopped
+    ports:
+      - "${AUTH_DB_PORT:-5433}:5432"
+    environment:
+      POSTGRES_DB: trio_mcp_provider
+      POSTGRES_USER: trio_mcp
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD:-trio_mcp_dev}
+    volumes:
+      - trio_mcp_provider_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U trio_mcp -d trio_mcp_provider"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  trio-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trio-mcp-server
+    command: ["./triov2", "server"]
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      PORT: "8080"
+      DATABASE_URL: postgres://trio_mcp:${AUTH_DB_PASSWORD:-trio_mcp_dev}@trio-mcp-provider-db:5432/trio_mcp_provider?sslmode=disable
+      MCP_ADMIN_URL: "http://trio-mcp-mcp:8082"
+    depends_on:
+      trio-mcp-provider-db:
+        condition: service_healthy
+
+  trio-mcp-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trio-mcp-mcp
+    command: ["./triov2", "mcp"]
+    restart: unless-stopped
+    ports:
+      - "${MCP_PORT:-8081}:8081"
+    environment:
+      MCP_PORT: "8081"
+      MCP_ADMIN_PORT: "8082"
+      DATABASE_URL: postgres://trio_mcp:${AUTH_DB_PASSWORD:-trio_mcp_dev}@trio-mcp-provider-db:5432/trio_mcp_provider?sslmode=disable
+    depends_on:
+      trio-mcp-provider-db:
+        condition: service_healthy
+
+volumes:
+  trio_mcp_provider_data:

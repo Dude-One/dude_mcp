@@ -1,0 +1,6 @@
+# Trio MCP — domain source registry
+# URL config only — no credentials.
+# Auth is handled per-request from the user's IDE config (username + password).
+# Add a domain here = MCP discovers it automatically. No code change needed.
+
+sources: []

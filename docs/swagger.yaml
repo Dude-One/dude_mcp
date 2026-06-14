@@ -1,0 +1,406 @@
+basePath: /
+definitions:
+  docs.ContextNotesResponse:
+    properties:
+      notes:
+        example: '# My context'
+        type: string
+    type: object
+  docs.ContextNotesSaveRequest:
+    properties:
+      notes:
+        example: '# My context'
+        type: string
+    type: object
+  docs.ErrorResponse:
+    properties:
+      error:
+        example: invalid credentials
+        type: string
+    type: object
+  docs.PanelLoginRequest:
+    properties:
+      credential:
+        example: admin
+        type: string
+      username:
+        example: admin
+        type: string
+    type: object
+  docs.PanelMeResponse:
+    properties:
+      allowed_projects:
+        example:
+        - trio-mcp
+        - trio-servermanagement
+        items:
+          type: string
+        type: array
+      display_name:
+        example: Admin User
+        type: string
+      tenant_id:
+        example: 00000000-0000-4000-8000-000000000001
+        type: string
+      user_id:
+        example: 00000000-0000-4000-8000-000000000010
+        type: string
+      username:
+        example: admin
+        type: string
+    type: object
+  docs.PanelSignUpRequest:
+    properties:
+      credential:
+        example: secret123
+        type: string
+      display_name:
+        example: Jane Doe
+        type: string
+      username:
+        example: jane
+        type: string
+    type: object
+  docs.StatusResponse:
+    properties:
+      status:
+        example: ok
+        type: string
+    type: object
+  github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.AuthConfig:
+    properties:
+      loginPath:
+        description: 'password: e.g. /panel/login'
+        type: string
+      paramName:
+        description: 'query_param: query key,  e.g. company_id'
+        type: string
+      passwordEnv:
+        description: 'password: env var holding the password'
+        type: string
+      type:
+        $ref: '#/definitions/github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.AuthType'
+      usernameEnv:
+        description: 'password: env var holding the username'
+        type: string
+      valueEnv:
+        description: 'query_param: env var holding the value, e.g. AGENTLESS_COMPANY_ID'
+        type: string
+    type: object
+  github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.AuthType:
+    enum:
+    - password
+    - query_param
+    type: string
+    x-enum-varnames:
+    - AuthTypePassword
+    - AuthTypeQueryParam
+  github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.Source:
+    properties:
+      auth:
+        $ref: '#/definitions/github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.AuthConfig'
+      baseURL:
+        type: string
+      contextPath:
+        description: e.g. /mcp/context
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      platformDomain:
+        description: id, infra, device, tenant, ...
+        type: string
+      swaggerPath:
+        description: e.g. /swagger/doc.json
+        type: string
+      type:
+        $ref: '#/definitions/github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.SourceType'
+    type: object
+  github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.SourceType:
+    enum:
+    - api
+    - context
+    type: string
+    x-enum-varnames:
+    - SourceTypeAPI
+    - SourceTypeContext
+host: localhost:8080
+info:
+  contact: {}
+  description: Mock identity provider and panel for Trio MCP (login, sessions, context
+    notes, admin).
+  title: TrioV2-MCP Panel API
+  version: "1.0"
+paths:
+  /admin/sources:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_trio_triov2-mcp_internal_domain_trio_mcp_entity.Source'
+            type: array
+      summary: List all sources
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a source
+      tags:
+      - admin
+  /admin/sources/:id:
+    delete:
+      responses: {}
+      summary: Delete a source
+      tags:
+      - admin
+    get:
+      parameters:
+      - description: Source UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get one source
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a source
+      tags:
+      - admin
+  /admin/sources/:id/toggle:
+    put:
+      responses: {}
+      summary: Enable or disable a source
+      tags:
+      - admin
+  /admin/users:
+    get:
+      produces:
+      - application/json
+      responses: {}
+      summary: List all users
+      tags:
+      - admin
+  /admin/users/:id/projects:
+    put:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      summary: Update user's allowed_projects
+      tags:
+      - admin
+  /admin/users/:id/role:
+    put:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      summary: Set user role (admin/user)
+      tags:
+      - admin
+  /mcp/context:
+    get:
+      description: Returns a JSON array of relative file paths available under the
+        domain context root.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: List context docs
+      tags:
+      - mcp-context
+  /mcp/context/{path}:
+    get:
+      description: Returns the raw content of a single context file. Rejects path
+        traversal.
+      parameters:
+      - description: Relative file path, e.g. README.md or guides/devices.md
+        in: path
+        name: path
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Read one context doc
+      tags:
+      - mcp-context
+  /panel/context-notes:
+    get:
+      description: Returns the user's saved context notes.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/docs.ContextNotesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docs.ErrorResponse'
+      summary: Get LLM context notes
+      tags:
+      - panel
+    put:
+      consumes:
+      - application/json
+      description: Persists the user's context notes.
+      parameters:
+      - description: Notes body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/docs.ContextNotesSaveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/docs.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/docs.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docs.ErrorResponse'
+      summary: Save LLM context notes
+      tags:
+      - panel
+  /panel/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates against the mock IdP. Sets trio_session cookie.
+      parameters:
+      - description: Login credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/docs.PanelLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/docs.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/docs.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docs.ErrorResponse'
+      summary: Panel login
+      tags:
+      - panel
+  /panel/logout:
+    post:
+      description: Revokes the trio_session cookie.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/docs.StatusResponse'
+      summary: Panel logout
+      tags:
+      - panel
+  /panel/me:
+    get:
+      description: Returns identity from the active trio_session cookie.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/docs.PanelMeResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docs.ErrorResponse'
+      summary: Current panel user
+      tags:
+      - panel
+  /panel/signup:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new password user on the default tenant and signs them
+        in.
+      parameters:
+      - description: Sign up details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/docs.PanelSignUpRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/docs.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/docs.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/docs.ErrorResponse'
+      summary: Panel sign up
+      tags:
+      - panel
+swagger: "2.0"

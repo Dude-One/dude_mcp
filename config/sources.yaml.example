@@ -1,0 +1,52 @@
+# Trio MCP — domain source registry
+# Copy to sources.yaml and adjust URLs/auth env vars.
+# MCP reads this at startup; add domains here without changing MCP tool code.
+# platform_domain must match Trio hierarchy: id, infra, device, tenant, ...
+#
+# Each domain service exposes two standard HTTP paths:
+#   swagger_path  — OpenAPI spec     e.g. GET /swagger/doc.json
+#   context_path  — Context docs     e.g. GET /mcp/context/{file}
+# MCP fetches both over HTTP with the same cache-TTL mechanism.
+#
+# Auth types:
+#   password    — POST to login_path with username/credential, cache session cookie
+#   query_param — append a fixed query param (e.g. ?company_id=X) on every call
+
+sources:
+  - name: trio-panel
+    platform_domain: id
+    description: |
+      Identity panel (ID domain). Login, sessions, user profile, allowed projects,
+      and per-user context notes. Use for "who am I" and tenant scope.
+    type: api
+    base_url: http://localhost:8080
+    swagger_path: /swagger/doc.json
+    context_path: /mcp/context
+    auth:
+      type: password
+      login_path: /panel/login
+      username_env: PANEL_SERVICE_USERNAME
+      password_env: PANEL_SERVICE_PASSWORD
+
+  - name: trio-servermanagement
+    platform_domain: infra
+    description: |
+      Server and device management (Infra). Devices, assets, playbooks, provisioning.
+      Use for online/offline device counts, asset health, and automation status.
+    type: api
+    base_url: https://sm.example.com
+    swagger_path: /swagger/doc.json
+    context_path: /mcp/context
+    auth:
+      type: query_param
+      param_name: company_id
+      value_env: SM_COMPANY_ID
+
+  - name: trio-servermanagement-docs
+    platform_domain: infra
+    description: |
+      Curated guides and architecture for server management.
+      Read before interpreting API responses.
+    type: context
+    base_url: https://sm.example.com
+    context_path: /mcp/context

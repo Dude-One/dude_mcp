@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trio MCP — Admin</title>
+  <link rel="stylesheet" href="/static/mcp/styles.css" />
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <span class="brand-mark">T</span>
+      <div>
+        <h1>Trio MCP</h1>
+        <p class="subtitle">Admin panel</p>
+      </div>
+    </div>
+    <nav class="header-links">
+      <span id="mcp-status-indicator" title="MCP server status" style="display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--muted);">
+        <span id="mcp-dot" class="dot checking"></span>
+        <span id="mcp-status-text">MCP…</span>
+      </span>
+      <a href="/swagger/index.html" target="_blank" rel="noopener">API docs</a>
+      <button id="logout-btn" class="btn ghost sm">Sign out</button>
+    </nav>
+  </header>
+
+  <!-- Loading -->
+  <section id="loading-view" class="card" style="text-align:center;color:var(--muted);">
+    <p>Checking session…</p>
+  </section>
+
+  <!-- Login form -->
+  <section id="login-view" class="card hidden" style="max-width:400px;margin:0 auto;">
+    <h2 style="margin-bottom:.25rem;">Sign in</h2>
+    <p class="hint">Admin access only.</p>
+    <form id="login-form" class="form">
+      <label>Username
+        <input id="login-username" type="text" required autocomplete="username" placeholder="admin" />
+      </label>
+      <label>Password
+        <input id="login-password" type="password" required autocomplete="current-password" placeholder="••••••••" />
+      </label>
+      <p id="login-error" class="error hidden"></p>
+      <button type="submit" class="btn primary">Sign in</button>
+    </form>
+  </section>
+
+  <!-- Not admin -->
+  <section id="forbidden-view" class="card hidden" style="text-align:center;">
+    <p style="color:var(--error);margin:0;">Admin access required.</p>
+    <p class="hint" style="margin-top:.5rem;">This account does not have admin privileges.</p>
+    <button class="btn ghost" onclick="showLogin()" style="margin-top:.5rem;">Sign in with a different account</button>
+  </section>
+
+  <!-- Main content -->
+  <main id="main-view" class="main hidden">
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="sources">Sources</button>
+      <button class="tab"        data-tab="users">Users</button>
+      <button class="tab"        data-tab="health">Health</button>
+    </div>
+
+    <!-- Sources tab -->
+    <div id="tab-sources" class="tab-panel active">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2>Sources</h2>
+            <p class="hint" style="margin:0;">Registered domain APIs served to MCP.</p>
+          </div>
+          <button id="add-source-btn" class="btn primary">+ Add source</button>
+        </div>
+        <div class="table-wrap">
+          <table id="sources-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Domain</th>
+                <th>Type</th>
+                <th>Base URL</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="sources-body">
+              <tr><td colspan="6" class="empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users tab -->
+    <div id="tab-users" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2>Users</h2>
+            <p class="hint" style="margin:0;">Manage roles and project access.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="users-table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Display name</th>
+                <th>Role</th>
+                <th>Allowed projects</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-body">
+              <tr><td colspan="6" class="empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Health tab -->
+    <div id="tab-health" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2>Health</h2>
+            <p class="hint" style="margin:0;">Live reachability of each registered source.</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+            <span id="health-mcp-indicator" style="display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--muted);">
+              <span id="health-mcp-dot" class="dot checking"></span>
+              <span id="health-mcp-text">Checking…</span>
+            </span>
+            <button id="reload-mcp-btn" class="btn primary">↺ Reload MCP</button>
+            <button id="refresh-health-btn" class="btn ghost">Refresh all</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Source</th><th>Domain</th><th>Base URL</th><th>Status</th><th>Check</th></tr>
+            </thead>
+            <tbody id="health-body">
+              <tr><td colspan="5" class="empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">Trio MCP Admin · session cookie: <code>trio_session</code></footer>
+</div>
+
+<!-- ── Source modal ── -->
+<div id="source-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="source-modal-title">Add source</h3>
+      <button class="modal-close" data-close="source-modal">✕</button>
+    </div>
+    <form id="source-form" class="form">
+      <div class="form-row">
+        <label>Name <input id="s-name" type="text" required placeholder="trio-agentless" /></label>
+        <label>Platform domain <input id="s-domain" type="text" required placeholder="device" /></label>
+      </div>
+      <label>Description <textarea id="s-desc" rows="2" placeholder="What this domain provides…"></textarea></label>
+      <div class="form-row">
+        <label>Type
+          <select id="s-type">
+            <option value="api">api</option>
+            <option value="context">context</option>
+          </select>
+        </label>
+        <label>Platform domain <input id="s-domain2" type="text" style="display:none" /></label>
+      </div>
+      <label>Base URL <input id="s-base-url" type="url" required placeholder="https://api.example.com" /></label>
+      <div class="form-row">
+        <label>Swagger path <input id="s-swagger" type="text" value="/swagger/doc.json" /></label>
+        <label>Context path <input id="s-context" type="text" value="/mcp/context" /></label>
+      </div>
+      <p class="hint" style="margin:0;">Auth is handled per-user via IDE config — no credentials stored here.</p>
+
+      <p id="source-form-error" class="error hidden"></p>
+      <div class="modal-footer">
+        <button type="button" class="btn ghost" data-close="source-modal">Cancel</button>
+        <button type="submit" id="source-form-submit" class="btn primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── User edit modal ── -->
+<div id="user-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="user-modal-title">Edit user</h3>
+      <button class="modal-close" data-close="user-modal">✕</button>
+    </div>
+    <form id="user-form" class="form">
+      <input id="u-id" type="hidden" />
+      <label>Role
+        <select id="u-role">
+          <option value="user">user</option>
+          <option value="admin">admin</option>
+        </select>
+      </label>
+      <label>
+        Allowed projects
+        <input id="u-projects" type="text" placeholder="trio-mcp, trio-agentless" />
+        <span class="hint" style="margin:0;font-size:.8rem;">Comma-separated list</span>
+      </label>
+      <p id="user-form-error" class="error hidden"></p>
+      <div class="modal-footer">
+        <button type="button" class="btn ghost" data-close="user-modal">Cancel</button>
+        <button type="submit" class="btn primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── Confirm modal ── -->
+<div id="confirm-modal" class="modal-overlay">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-header">
+      <h3 id="confirm-title">Confirm</h3>
+      <button class="modal-close" data-close="confirm-modal">✕</button>
+    </div>
+    <p id="confirm-message" style="margin:0 0 1.5rem;"></p>
+    <div class="modal-footer">
+      <button class="btn ghost" data-close="confirm-modal">Cancel</button>
+      <button id="confirm-ok" class="btn danger">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="/static/mcp/components/sources.js"></script>
+<script src="/static/mcp/components/users.js"></script>
+<script src="/static/mcp/components/health.js"></script>
+<script src="/static/mcp/app.js"></script>
+</body>
+</html>

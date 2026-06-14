@@ -1,0 +1,8 @@
+{
+  "_comment": "Cursor MCP config — save this to: ~/.cursor/mcp.json",
+  "mcpServers": {
+    "trio-mcp": {
+      "url": "http://localhost:8081/mcp"
+    }
+  }
+}
