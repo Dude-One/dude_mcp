@@ -171,5 +171,5 @@ Open MCP-Documents/    Authoritative platform docs (rules, domain specs)
 
 | Username | Password | Role |
 |----------|----------|------|
-| `admin` | `admin` | Admin |
-| `service-bot` | `dev-service-token-change-me` | Service account |
+| `admin` | `admin` | Admin — **change before going to production** |
+| `service-bot` | `dev-service-token-change-me` | Service account — **change before going to production** |

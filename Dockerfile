@@ -6,11 +6,11 @@ WORKDIR /src
 RUN apk add --no-cache git ca-certificates
 
 COPY go.mod go.sum ./
-RUN go mod download
+COPY vendor ./vendor
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /out/open-mcp ./cmd/open-mcp
+RUN CGO_ENABLED=0 GOOS=linux go build -mod=vendor -ldflags="-s -w" -o /out/open-mcp ./cmd/open-mcp
 
 # Runtime stage
 FROM alpine:3.20

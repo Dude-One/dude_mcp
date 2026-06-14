@@ -17,6 +17,58 @@ func NewPanelHandler(svc service.AuthService) *PanelHandler {
 	return &PanelHandler{svc: svc}
 }
 
+// SetupCheck godoc
+// @Summary      First-run setup check
+// @Description  Returns whether the instance needs initial setup (no users exist yet).
+// @Tags         panel
+// @Produce      json
+// @Success      200  {object}  docs.SetupCheckResponse
+// @Router       /panel/setup/check [get]
+func (h *PanelHandler) SetupCheck(c *gin.Context) {
+	needs, err := h.svc.NeedsSetup(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"needs_setup": needs})
+}
+
+// Setup godoc
+// @Summary      First-run admin creation
+// @Description  Creates the first admin user. Fails with 409 if any user already exists.
+// @Tags         panel
+// @Accept       json
+// @Produce      json
+// @Param        body  body      docs.PanelSignUpRequest  true  "Admin credentials"
+// @Success      201   {object}  docs.StatusResponse
+// @Failure      400   {object}  docs.ErrorResponse
+// @Failure      409   {object}  docs.ErrorResponse
+// @Router       /panel/setup [post]
+func (h *PanelHandler) Setup(c *gin.Context) {
+	var body struct {
+		Username    string `json:"username" binding:"required"`
+		Credential  string `json:"credential" binding:"required"`
+		DisplayName string `json:"display_name"`
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "username and credential are required"})
+		return
+	}
+
+	sessionToken, err := h.svc.SetupFirstAdmin(c.Request.Context(), body.Username, body.Credential, body.DisplayName)
+	if err != nil {
+		if err.Error() == "setup already complete" {
+			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.SetCookie("open_mcp_session", sessionToken, int(24*time.Hour/time.Second), "/", "", false, true)
+	c.JSON(http.StatusCreated, gin.H{"status": "ok"})
+}
+
 // Login godoc
 // @Summary      Panel login
 // @Description  Authenticates against the mock IdP. Sets open_mcp_session cookie.

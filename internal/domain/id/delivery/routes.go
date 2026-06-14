@@ -15,6 +15,8 @@ func RegisterRoutes(r gin.IRouter, panel *PanelHandler, ctx *ContextHandler) {
 	// Panel API — used by the admin UI and the MCP server.
 	panelAPI := r.Group("/panel")
 	{
+		panelAPI.GET("/setup/check", panel.SetupCheck)
+		panelAPI.POST("/setup", panel.Setup)
 		panelAPI.POST("/login", panel.Login)
 		panelAPI.POST("/signup", panel.SignUp)
 		panelAPI.POST("/logout", panel.Logout)

@@ -14,7 +14,7 @@
   };
 
   // ── Views ──────────────────────────────────────────────────────────────────
-  const views = ['loading-view', 'login-view', 'forbidden-view', 'main-view'];
+  const views = ['loading-view', 'setup-view', 'login-view', 'forbidden-view', 'main-view'];
 
   function show(id) {
     views.forEach(function (v) {
@@ -203,7 +203,39 @@
     setInterval(checkMCPStatus, 30000);
   }
 
+  // ── Setup form ─────────────────────────────────────────────────────────────
+  document.getElementById('setup-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var err = document.getElementById('setup-error');
+    err.classList.add('hidden');
+
+    var username    = document.getElementById('setup-username').value.trim();
+    var credential  = document.getElementById('setup-password').value;
+    var displayName = document.getElementById('setup-display').value.trim();
+
+    var res = await api('/panel/setup', {
+      method: 'POST',
+      body: JSON.stringify({ username, credential, display_name: displayName }),
+    });
+
+    if (!res.ok) {
+      err.textContent = (res.body && res.body.error) || 'Setup failed';
+      err.classList.remove('hidden');
+      return;
+    }
+
+    await checkSession();
+  });
+
   // ── Boot ───────────────────────────────────────────────────────────────────
   show('loading-view');
-  checkSession();
+
+  (async function boot() {
+    var setupRes = await api('/panel/setup/check');
+    if (setupRes.ok && setupRes.body && setupRes.body.needs_setup) {
+      show('setup-view');
+      return;
+    }
+    checkSession();
+  })();
 })();

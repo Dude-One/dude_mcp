@@ -29,6 +29,40 @@ func NewAuthService(
 	}
 }
 
+func (s *AuthServiceImpl) NeedsSetup(ctx context.Context) (bool, error) {
+	count, err := s.users.Count(ctx)
+	if err != nil {
+		return false, err
+	}
+	return count == 0, nil
+}
+
+func (s *AuthServiceImpl) SetupFirstAdmin(ctx context.Context, username, credential, displayName string) (string, error) {
+	needsSetup, err := s.NeedsSetup(ctx)
+	if err != nil {
+		return "", err
+	}
+	if !needsSetup {
+		return "", errors.New("setup already complete")
+	}
+
+	tenantID, err := s.tenants.FindByName(ctx, "default")
+	if err != nil {
+		return "", err
+	}
+
+	user, err := entity.NewPasswordUser(tenantID, username, credential, displayName)
+	if err != nil {
+		return "", err
+	}
+	user.Role = entity.RoleAdmin
+
+	if err := s.users.Create(ctx, user); err != nil {
+		return "", err
+	}
+	return s.Login(ctx, username, credential)
+}
+
 func (s *AuthServiceImpl) Login(ctx context.Context, username, credential string) (string, error) {
 	user, err := s.users.FindByUsername(ctx, username)
 	if err != nil {

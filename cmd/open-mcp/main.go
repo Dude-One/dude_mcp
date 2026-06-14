@@ -169,6 +169,19 @@ func runMCP() {
 		log.Fatalf("connect database: %v", err)
 	}
 
+	log.Println("applying schema (GORM AutoMigrate)...")
+	if err := adapter.Migrate(db); err != nil {
+		log.Fatalf("migrate id tables: %v", err)
+	}
+	if err := mcpadapter.MigrateAdminTables(db); err != nil {
+		log.Fatalf("migrate mcp tables: %v", err)
+	}
+
+	log.Println("seeding dev data...")
+	if err := adapter.Seed(db); err != nil {
+		log.Fatalf("seed: %v", err)
+	}
+
 	idMod := id.NewModule(db)
 
 	sourcesPath := os.Getenv("SOURCES_PATH")

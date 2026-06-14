@@ -33,6 +33,25 @@
     <p>Checking session…</p>
   </section>
 
+  <!-- First-run setup form -->
+  <section id="setup-view" class="card hidden" style="max-width:400px;margin:0 auto;">
+    <h2 style="margin-bottom:.25rem;">Welcome to Open MCP</h2>
+    <p class="hint">No users found. Create the first admin account to get started.</p>
+    <form id="setup-form" class="form">
+      <label>Username
+        <input id="setup-username" type="text" required autocomplete="username" placeholder="admin" />
+      </label>
+      <label>Password
+        <input id="setup-password" type="password" required autocomplete="new-password" placeholder="••••••••" />
+      </label>
+      <label>Display name <span class="hint" style="font-size:.8rem;">(optional)</span>
+        <input id="setup-display" type="text" autocomplete="name" placeholder="Admin" />
+      </label>
+      <p id="setup-error" class="error hidden"></p>
+      <button type="submit" class="btn primary">Create admin account</button>
+    </form>
+  </section>
+
   <!-- Login form -->
   <section id="login-view" class="card hidden" style="max-width:400px;margin:0 auto;">
     <h2 style="margin-bottom:.25rem;">Sign in</h2>

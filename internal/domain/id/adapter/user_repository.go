@@ -44,6 +44,12 @@ func (r *PostgresUserRepository) FindByID(ctx context.Context, id uuid.UUID) (*e
 	return userToDomain(&m), nil
 }
 
+func (r *PostgresUserRepository) Count(ctx context.Context) (int64, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Model(&User{}).Count(&count).Error
+	return count, err
+}
+
 func (r *PostgresUserRepository) FindAll(ctx context.Context) ([]*entity.User, error) {
 	var rows []User
 	if err := r.db.WithContext(ctx).Order("username").Find(&rows).Error; err != nil {

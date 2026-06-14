@@ -13,6 +13,7 @@ type UserRepository interface {
 	FindByUsername(ctx context.Context, username string) (*entity.User, error)
 	FindByID(ctx context.Context, id uuid.UUID) (*entity.User, error)
 	FindAll(ctx context.Context) ([]*entity.User, error)
+	Count(ctx context.Context) (int64, error)
 	ExistsByUsername(ctx context.Context, username string) (bool, error)
 	Create(ctx context.Context, user *entity.User) error
 	UpdateContextNotes(ctx context.Context, userID uuid.UUID, notes *string) error
