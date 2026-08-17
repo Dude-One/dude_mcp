@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/entity"
+	"github.com/Dude-One/dude_mcp/internal/domain/dude_mcp/entity"
 )
 
 // MCPService is the interface the delivery layer calls.

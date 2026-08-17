@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/entity"
+	"github.com/Dude-One/dude_mcp/internal/domain/dude_mcp/entity"
 	"gorm.io/gorm"
 )
 

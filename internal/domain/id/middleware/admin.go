@@ -4,15 +4,15 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/open-mcp/open-mcp/internal/domain/id/entity"
-	"github.com/open-mcp/open-mcp/internal/domain/id/service"
+	"github.com/Dude-One/dude_mcp/internal/domain/id/entity"
+	"github.com/Dude-One/dude_mcp/internal/domain/id/service"
 )
 
 // AdminOnly rejects requests from non-admin users with 403.
 // Requires the session to be resolved — place after session middleware or inline.
 func AdminOnly(svc service.AuthService) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token, err := c.Cookie("open_mcp_session")
+		token, err := c.Cookie("dude_mcp_session")
 		if err != nil || token == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "not logged in"})
 			c.Abort()

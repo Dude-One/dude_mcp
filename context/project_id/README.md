@@ -12,20 +12,20 @@ Platform domain: **ID** — authentication, sessions, users, and per-user MCP co
 
 | Term | Meaning |
 |------|---------|
-| `open_mcp_session` | Opaque panel session cookie / Bearer token |
+| `dude_mcp_session` | Opaque panel session cookie / Bearer token |
 | `allowed_projects` | Platform domains or projects this user may access via MCP |
 | `context_notes` | Free-form markdown injected into AI context for this user |
 
 ## Live API
 
 Swagger is fetched dynamically by MCP from `/swagger/doc.json` on the panel service.
-Do not duplicate route lists here — use `get_api_spec("open-mcp-panel")` in the IDE.
+Do not duplicate route lists here — use `get_api_spec("dude-mcp-panel")` in the IDE.
 
 ## Related domains
 
-- **Infra** (`open-mcp-servermanagement`) — devices, assets, playbooks (separate Core service).
+- **Infra** (`dude-mcp-servermanagement`) — devices, assets, playbooks (separate Core service).
 - **Device** — enrollment and telemetry (when registered in MCP).
 
 ## Authoritative docs
 
-See `Open MCP-Documents/ID/` for Auth, Users, MFA, and ACL specifications.
+See `Dude MCP-Documents/ID/` for Auth, Users, MFA, and ACL specifications.

@@ -1,4 +1,4 @@
-# Open MCP — MCP Protocol Integration (Cursor / Claude / Codex)
+# Dude MCP — MCP Protocol Integration (Cursor / Claude / Codex)
 
 > **Gate:** HTTP MCP server (`cmd/mcp`)  
 > **Transport:** Streamable HTTP (`POST /mcp`) — deployed web service  
@@ -19,7 +19,7 @@ MCP is JSON-RPC 2.0 between the IDE's LLM and **your MCP web service**. MCP does
 
 ```
 User asks Cursor a question
-  → LLM calls get_api_spec("open-mcp-servermanagement")
+  → LLM calls get_api_spec("dude-mcp-servermanagement")
   → MCP fetches OpenAPI from registered swagger_path (cached)
   → LLM calls call_api(...) for live data
   → LLM optionally read_context(...) for domain guides
@@ -34,15 +34,15 @@ Domains are registered in `config/sources.yaml` — not hardcoded in MCP tools.
 
 Each entry includes:
 
-- `name` — tool argument (e.g. `open-mcp-panel`)
-- `platform_domain` — official Open MCP domain key: `id`, `infra`, `device`, … matches `context/project_{platform_domain}/`
+- `name` — tool argument (e.g. `dude-mcp-panel`)
+- `platform_domain` — official Dude MCP domain key: `id`, `infra`, `device`, … matches `context/project_{platform_domain}/`
 - `description` — **domain docstring** for the LLM (`list_sources`)
 - `type` — `api` (Swagger + call_api) or `context` (docs only)
 - `base_url` — service root URL; used for both Swagger and context fetches
 - `swagger_path` — standard path: `GET {base_url}/swagger/doc.json`
 - `context_path` — standard path: `GET {base_url}/mcp/context/{file}`
 
-**Standard path convention** — all Open MCP services implement:
+**Standard path convention** — all Dude MCP services implement:
 
 | Resource | Endpoint |
 |----------|----------|

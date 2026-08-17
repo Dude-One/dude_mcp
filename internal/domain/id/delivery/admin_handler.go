@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/open-mcp/open-mcp/internal/domain/id/repository"
+	"github.com/Dude-One/dude_mcp/internal/domain/id/repository"
 )
 
 // AdminUserHandler handles admin operations on users.

@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "open-mcp": {
+    "dude-mcp": {
       "type": "http",
       "url": "http://localhost:8081/mcp"
     }

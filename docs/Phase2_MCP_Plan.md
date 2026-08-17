@@ -4,8 +4,8 @@
 > Captures a design review of the current Phase 2 plan, the open decisions to settle
 > before coding, and a build order with security work pulled forward.
 >
-> Source plan: [`TODO.md`](./TODO.md) Phase 2 · [`PROJECT_CONTEXT_AI_DESIGN.md`](./PROJECT_CONTEXT_AI_DESIGN.md) · [`../Open MCP-Documents/Platform/MCP.md`](../Open MCP-Documents/Platform/MCP.md)
-> Governance: [`../Open MCP-Documents/rules/00-trio-core.mdc`](../Open MCP-Documents/rules/00-trio-core.mdc) and the other `rules/*.mdc`.
+> Source plan: [`TODO.md`](./TODO.md) Phase 2 · [`PROJECT_CONTEXT_AI_DESIGN.md`](./PROJECT_CONTEXT_AI_DESIGN.md) · [`../Dude MCP-Documents/Platform/MCP.md`](../Dude MCP-Documents/Platform/MCP.md)
+> Governance: [`../Dude MCP-Documents/rules/00-trio-core.mdc`](../Dude MCP-Documents/rules/00-trio-core.mdc) and the other `rules/*.mdc`.
 
 ---
 
@@ -40,7 +40,7 @@ The plan's mitigations (GET/HEAD only, reject `..`, audit) are good but the **pe
 
 ### 4. Context docs have three potential sources of truth (docs / drift)
 
-`Open MCP-Documents/<Domain>/` is "authoritative," `context/project_*/` are "IDE-oriented summaries," and Swagger descriptions are a third. Nothing keeps them in sync, so the LLM will eventually read stale context and act on it confidently.
+`Dude MCP-Documents/<Domain>/` is "authoritative," `context/project_*/` are "IDE-oriented summaries," and Swagger descriptions are a third. Nothing keeps them in sync, so the LLM will eventually read stale context and act on it confidently.
 
 **Recommendation:** declare what is canonical and how summaries are derived/validated. Also resolve the stated-vs-actual point: the design says context docs are served by each domain service and *not* stored on MCP disk, but Phase 1 stores them on disk in `context/project_id/`. That is fine under the panel-is-the-ID-service reading — write it down so it is not read as a contradiction.
 
@@ -57,7 +57,7 @@ An in-process TTL cache is process-local state, which the stateless-replica rule
 | D1 | IDE→MCP credential | Panel session token (plan) vs. dedicated MCP access token | **MCP access token** (own lifecycle/scopes/revocation). Session token acceptable only for a throwaway dev spike. |
 | D2 | `call_api` safety scope for Phase 2 | Defer allowlist+tenant enforcement to Phase 4 (plan) vs. include now | **Include now**: per-source path allowlist + MCP-layer tenant scope enforcement + GET/HEAD only. |
 | D3 | Code layout | Transitional `core/mcp` vs. target `internal/domain/mcp/` | **Target layout** from first commit. |
-| D4 | Context-doc canonical source | Undeclared (3 candidates) | Declare `Open MCP-Documents/<Domain>/` authoritative; `context/project_*/` are derived summaries. |
+| D4 | Context-doc canonical source | Undeclared (3 candidates) | Declare `Dude MCP-Documents/<Domain>/` authoritative; `context/project_*/` are derived summaries. |
 | D5 | Swagger cache | In-process TTL vs. Redis | In-process TTL is fine if documented as soft/per-replica; move to Redis only if freshness consistency is required. |
 
 ---
@@ -67,7 +67,7 @@ An in-process TTL cache is process-local state, which the stateless-replica rule
 Security items (originally Phase 4) are folded into the first `call_api`. Build in the **target** `internal/domain/mcp/` layout.
 
 ### Step 1 — Registry + config
-- [ ] `config/sources.yaml` — copy from example; register `open-mcp-panel` (`platform_domain: id`, `swagger_path: /swagger/doc.json`, `context_path: /mcp/context`). **Add a per-source `allowlist` of permitted method+path patterns** (D2).
+- [ ] `config/sources.yaml` — copy from example; register `dude-mcp-panel` (`platform_domain: id`, `swagger_path: /swagger/doc.json`, `context_path: /mcp/context`). **Add a per-source `allowlist` of permitted method+path patterns** (D2).
 - [ ] `.env` (single file, inline comments) — `MCP_PORT`, `PANEL_SERVICE_TOKEN`, `SWAGGER_CACHE_TTL`, and the MCP-access-token settings from D1.
 
 ### Step 2 — Core domain (`internal/domain/mcp/`)
@@ -93,11 +93,11 @@ Security items (originally Phase 4) are folded into the first `call_api`. Build 
 
 ### Step 6 — IDE wiring
 - [ ] `.cursor/mcp.json` (dev) — point to `:8081`, use MCP access token (not session token).
-- [ ] `.vscode/launch.json` — add "Open MCP: MCP Server" debug config.
+- [ ] `.vscode/launch.json` — add "Dude MCP: MCP Server" debug config.
 
 ### Step 7 — Verify (acceptance, not just code paths)
-- [ ] `list_sources` returns `open-mcp-panel`.
-- [ ] `get_api_spec("open-mcp-panel")` returns live Swagger from panel.
+- [ ] `list_sources` returns `dude-mcp-panel`.
+- [ ] `get_api_spec("dude-mcp-panel")` returns live Swagger from panel.
 - [ ] `get_user_context` returns current user via MCP access token.
 - [ ] `read_context("id", "README.md")` returns `context/project_id/README.md`.
 - [ ] **`call_api` to a non-allowlisted path is denied.**
@@ -117,5 +117,5 @@ Expect to update: **Code** (new bounded context), **DB** (MCP access tokens tabl
 - **Assumed:** the panel acts as the ID domain service for the `/mcp/context` convention; storing `context/project_id/` on the panel disk is the intended Phase-1 form, not a contradiction of the "domains serve their own docs" rule.
 - **Assumed:** `mark3labs/mcp-go` is the chosen MCP library (named in `TODO.md`). Confirm before adding the dependency.
 - **Open (D1):** is there appetite to add an MCP-access-token table + minimal issue/revoke flow in Phase 2, or is the session-token shortcut acceptable for the first internal milestone? This is the single highest-impact decision.
-- **Open (D4):** who owns keeping `context/project_*/` summaries in sync with `Open MCP-Documents/<Domain>/`? Manual, or generated?
-- **Open:** there is no root `CLAUDE.md` in the repo today (only `Open MCP-Documents/rules/*.mdc`). If Claude Code should auto-load governance, add a root `CLAUDE.md` that references the rules folder.
+- **Open (D4):** who owns keeping `context/project_*/` summaries in sync with `Dude MCP-Documents/<Domain>/`? Manual, or generated?
+- **Open:** there is no root `CLAUDE.md` in the repo today (only `Dude MCP-Documents/rules/*.mdc`). If Claude Code should auto-load governance, add a root `CLAUDE.md` that references the rules folder.

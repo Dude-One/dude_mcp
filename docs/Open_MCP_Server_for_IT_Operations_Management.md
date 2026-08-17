@@ -1,12 +1,12 @@
-# Open MCP Server for IT Operations Management
+# Dude MCP Server for IT Operations Management
 ## 1. Goal
 Build a reusable MCP Server for Trio that allows external LLM clients such as Claude, Cursor, and other MCP-compatible agents to securely access Trio product capabilities.
-The first implementation target is IT Operations Management, but the architecture must support other Open MCP domains such as Command Center, Asset Management, Automation, and Reporting.
+The first implementation target is IT Operations Management, but the architecture must support other Dude MCP domains such as Command Center, Asset Management, Automation, and Reporting.
 ## 2. Core Principle
 MCP should be implemented as a platform-level integration layer, not as a feature tightly coupled to IT Operations Management.
 ```text
 LLM Client
-  -> Open MCP Server
+  -> Dude MCP Server
   -> Tool Registry
   -> Domain Tools
   -> Existing Trio Backend APIs
@@ -22,7 +22,7 @@ Claude / Cursor / MCP Client
         | MCP Protocol
         v
 +-----------------------+
-| Open MCP Server       |
+| Dude MCP Server       |
 +-----------------------+
 | Auth Context Resolver |
 | Tool Registry         |
@@ -255,7 +255,7 @@ command_center.overview.get
 8. Recommended Project Structure
 
 services/
-  open-mcp-server/
+  dude-mcp-server/
     src/
       index.ts
       mcp/
@@ -387,7 +387,7 @@ Out of scope for MVP:
 
 Phase 1: Foundation
 
-* Create open-mcp-server
+* Create dude-mcp-server
 * Add MCP server runtime
 * Add stdio transport
 * Add tool registry
@@ -431,11 +431,11 @@ Phase 5: Hosted MCP
 
 The implementation is complete when:
 
-* Claude or Cursor can connect to Open MCP Server
+* Claude or Cursor can connect to Dude MCP Server
 * A user can search ITOM incidents through MCP
 * Tool calls are permission-checked
 * Tool calls are audited
-* The MCP Server uses existing Open MCP backend APIs
+* The MCP Server uses existing Dude MCP backend APIs
 * New domain tools can be added without changing the MCP core
 * Command Center tools can reuse the same registry and runtime
 
@@ -449,7 +449,7 @@ Do not build a separate MCP Server only for ITOM.
 
 The correct long-term design is:
 
-Open MCP Server
+Dude MCP Server
   -> ITOM Tools
   -> Command Center Tools
   -> Asset Tools

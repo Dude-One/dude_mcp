@@ -15,9 +15,9 @@ func OpenFromEnv() (*gorm.DB, error) {
 		dsn = fmt.Sprintf(
 			"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 			envOr("AUTH_DB_HOST", "localhost"),
-			envOr("AUTH_DB_USER", "open_mcp"),
-			envOr("AUTH_DB_PASSWORD", "open_mcp_dev"),
-			envOr("AUTH_DB_NAME", "open_mcp_db"),
+			envOr("AUTH_DB_USER", "dude_mcp"),
+			envOr("AUTH_DB_PASSWORD", "dude_mcp_dev"),
+			envOr("AUTH_DB_NAME", "dude_mcp_db"),
 			envOr("AUTH_DB_PORT", "5433"),
 		)
 	}

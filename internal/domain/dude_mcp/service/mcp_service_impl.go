@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/entity"
-	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/repository"
+	"github.com/Dude-One/dude_mcp/internal/domain/dude_mcp/entity"
+	"github.com/Dude-One/dude_mcp/internal/domain/dude_mcp/repository"
 )
 
 var validMethods = map[string]bool{

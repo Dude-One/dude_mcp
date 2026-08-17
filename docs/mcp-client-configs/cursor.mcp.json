@@ -1,7 +1,7 @@
 {
   "_comment": "Cursor MCP config — save this to: ~/.cursor/mcp.json",
   "mcpServers": {
-    "open-mcp": {
+    "dude-mcp": {
       "url": "http://localhost:8081/mcp"
     }
   }

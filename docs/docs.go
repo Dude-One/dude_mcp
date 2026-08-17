@@ -30,7 +30,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.Source"
+                                "$ref": "#/definitions/github_com_dude-mcp_dude-mcp_internal_domain_dude_mcp_entity.Source"
                             }
                         }
                     }
@@ -284,7 +284,7 @@ const docTemplate = `{
         },
         "/panel/login": {
             "post": {
-                "description": "Authenticates against the mock IdP. Sets open_mcp_session cookie.",
+                "description": "Authenticates against the mock IdP. Sets dude_mcp_session cookie.",
                 "consumes": [
                     "application/json"
                 ],
@@ -330,7 +330,7 @@ const docTemplate = `{
         },
         "/panel/logout": {
             "post": {
-                "description": "Revokes the open_mcp_session cookie.",
+                "description": "Revokes the dude_mcp_session cookie.",
                 "produces": [
                     "application/json"
                 ],
@@ -350,7 +350,7 @@ const docTemplate = `{
         },
         "/panel/me": {
             "get": {
-                "description": "Returns identity from the active open_mcp_session cookie.",
+                "description": "Returns identity from the active dude_mcp_session cookie.",
                 "produces": [
                     "application/json"
                 ],
@@ -471,8 +471,8 @@ const docTemplate = `{
                         "type": "string"
                     },
                     "example": [
-                        "open-mcp",
-                        "open-mcp-servermanagement"
+                        "dude-mcp",
+                        "dude-mcp-servermanagement"
                     ]
                 },
                 "display_name": {
@@ -519,7 +519,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.AuthConfig": {
+        "github_com_dude-mcp_dude-mcp_internal_domain_dude_mcp_entity.AuthConfig": {
             "type": "object",
             "properties": {
                 "loginPath": {
@@ -535,7 +535,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.AuthType"
+                    "$ref": "#/definitions/github_com_dude-mcp_dude-mcp_internal_domain_dude_mcp_entity.AuthType"
                 },
                 "usernameEnv": {
                     "description": "password: env var holding the username",
@@ -547,7 +547,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.AuthType": {
+        "github_com_dude-mcp_dude-mcp_internal_domain_dude_mcp_entity.AuthType": {
             "type": "string",
             "enum": [
                 "password",
@@ -558,11 +558,11 @@ const docTemplate = `{
                 "AuthTypeQueryParam"
             ]
         },
-        "github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.Source": {
+        "github_com_dude-mcp_dude-mcp_internal_domain_dude_mcp_entity.Source": {
             "type": "object",
             "properties": {
                 "auth": {
-                    "$ref": "#/definitions/github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.AuthConfig"
+                    "$ref": "#/definitions/github_com_dude-mcp_dude-mcp_internal_domain_dude_mcp_entity.AuthConfig"
                 },
                 "baseURL": {
                     "type": "string"
@@ -586,11 +586,11 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.SourceType"
+                    "$ref": "#/definitions/github_com_dude-mcp_dude-mcp_internal_domain_dude_mcp_entity.SourceType"
                 }
             }
         },
-        "github_com_open-mcp_open-mcp_internal_domain_open_mcp_entity.SourceType": {
+        "github_com_dude-mcp_dude-mcp_internal_domain_dude_mcp_entity.SourceType": {
             "type": "string",
             "enum": [
                 "api",
@@ -610,8 +610,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Open MCP Panel API",
-	Description:      "Mock identity provider and panel for Open MCP (login, sessions, context notes, admin).",
+	Title:            "Dude MCP Panel API",
+	Description:      "Mock identity provider and panel for Dude MCP (login, sessions, context notes, admin).",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
