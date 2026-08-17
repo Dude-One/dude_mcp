@@ -6,7 +6,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/entity"
+	"github.com/Dude-One/dude_mcp/internal/domain/dude_mcp/entity"
 	"gopkg.in/yaml.v3"
 )
 

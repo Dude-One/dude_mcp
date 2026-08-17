@@ -1,69 +1,69 @@
-# Open MCP — panel server + MCP server + database
+# Dude MCP — panel server + MCP server + database
 #
 # Start everything:
 #   docker compose up -d --build
 #
 # DB only:
-#   docker compose up -d open-mcp-db
+#   docker compose up -d dude-mcp-db
 #
 # Rebuild after code changes:
-#   docker compose up -d --build open-mcp-server open-mcp-mcp
+#   docker compose up -d --build dude-mcp-server dude-mcp-mcp
 
 services:
-  open-mcp-db:
+  dude-mcp-db:
     build:
       context: ./infra/auth-db
       dockerfile: Dockerfile
-    container_name: open-mcp-db
+    container_name: dude-mcp-db
     restart: unless-stopped
     ports:
       - "${AUTH_DB_PORT:-5433}:5432"
     environment:
-      POSTGRES_DB: open_mcp_db
-      POSTGRES_USER: open_mcp
-      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD:-open_mcp_dev}
+      POSTGRES_DB: dude_mcp_db
+      POSTGRES_USER: dude_mcp
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD:-dude_mcp_dev}
     volumes:
-      - open_mcp_data:/var/lib/postgresql/data
+      - dude_mcp_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U open_mcp -d open_mcp_db"]
+      test: ["CMD-SHELL", "pg_isready -U dude_mcp -d dude_mcp_db"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 15s
 
-  open-mcp-server:
+  dude-mcp-server:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: open-mcp-server
-    command: ["./open-mcp", "server"]
+    container_name: dude-mcp-server
+    command: ["./dude-mcp", "server"]
     restart: unless-stopped
     ports:
       - "${PORT:-8080}:8080"
     environment:
       PORT: "8080"
-      DATABASE_URL: postgres://open_mcp:${AUTH_DB_PASSWORD:-open_mcp_dev}@open-mcp-db:5432/open_mcp_db?sslmode=disable
-      MCP_ADMIN_URL: "http://open-mcp-mcp:8082"
+      DATABASE_URL: postgres://dude_mcp:${AUTH_DB_PASSWORD:-dude_mcp_dev}@dude-mcp-db:5432/dude_mcp_db?sslmode=disable
+      MCP_ADMIN_URL: "http://dude-mcp-mcp:8082"
     depends_on:
-      open-mcp-db:
+      dude-mcp-db:
         condition: service_healthy
 
-  open-mcp-mcp:
+  dude-mcp-mcp:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: open-mcp-mcp
-    command: ["./open-mcp", "mcp"]
+    container_name: dude-mcp-mcp
+    command: ["./dude-mcp", "mcp"]
     restart: unless-stopped
     ports:
       - "${MCP_PORT:-8081}:8081"
     environment:
       MCP_PORT: "8081"
       MCP_ADMIN_PORT: "8082"
-      DATABASE_URL: postgres://open_mcp:${AUTH_DB_PASSWORD:-open_mcp_dev}@open-mcp-db:5432/open_mcp_db?sslmode=disable
+      DATABASE_URL: postgres://dude_mcp:${AUTH_DB_PASSWORD:-dude_mcp_dev}@dude-mcp-db:5432/dude_mcp_db?sslmode=disable
     depends_on:
-      open-mcp-db:
+      dude-mcp-db:
         condition: service_healthy
 
 volumes:
-  open_mcp_data:
+  dude_mcp_data:

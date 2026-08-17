@@ -1,4 +1,4 @@
-# TODO — Open MCP
+# TODO — Dude MCP
 
 ## 1. Decouple auth from the built-in panel
 The MCP server currently depends on the identity panel as its IdP.

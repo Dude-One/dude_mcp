@@ -1,4 +1,4 @@
-module github.com/open-mcp/open-mcp
+module github.com/Dude-One/dude_mcp
 
 go 1.25.5
 

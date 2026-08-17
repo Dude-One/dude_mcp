@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/service"
+	"github.com/Dude-One/dude_mcp/internal/domain/dude_mcp/service"
 )
 
 // Handlers holds the MCP tool handler functions.

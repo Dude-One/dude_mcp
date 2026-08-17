@@ -1,6 +1,6 @@
 # AI Observability — DDD Design Document
 
-> **Open MCP** — Separate bounded context for capturing, storing, and streaming AI interaction traces.
+> **Dude MCP** — Separate bounded context for capturing, storing, and streaming AI interaction traces.
 
 ---
 

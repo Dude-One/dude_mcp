@@ -46,7 +46,7 @@ The moment you provide a panel where users connect **their own** ChatGPT account
 6. ChatGPT stores these tokens PER USER
 
 7. Every API call from that user's ChatGPT:
-   POST /context-ai/projects/open-mcp-servermanagement/ask
+   POST /context-ai/projects/dude-mcp-servermanagement/ask
    Authorization: Bearer eyJ...
    → your middleware decodes token → userID + tenantID + allowedProjects
 
@@ -87,7 +87,7 @@ The moment you provide a panel where users connect **their own** ChatGPT account
 type OAuthClient struct {
     ClientID     string   // "trio-chatgpt-gpt"
     ClientSecret string   // hashed — never stored plain
-    Name         string   // "Open MCP ChatGPT Assistant"
+    Name         string   // "Dude MCP ChatGPT Assistant"
     RedirectURIs []string // ["https://chat.openai.com/aip/..."]
     AllowedScopes []Scope // ["context:read"]
     CreatedAt    time.Time
@@ -310,7 +310,7 @@ Query params:
 
 Flow:
   → validate client_id exists + redirect_uri is whitelisted
-  → if user has active panel session → show "Approve Open MCP ChatGPT?" screen
+  → if user has active panel session → show "Approve Dude MCP ChatGPT?" screen
   → if no session → show login form
   → on approval → issue auth code → redirect to redirect_uri?code=xxx&state=xxx
 ```

@@ -19,13 +19,13 @@ Platform domain: **Infra** — servers, devices, assets, playbooks, and provisio
 ## Live API
 
 Swagger is fetched dynamically by MCP from the server management service.
-Use `get_api_spec("open-mcp-servermanagement")` — routes are not duplicated here.
+Use `get_api_spec("dude-mcp-servermanagement")` — routes are not duplicated here.
 
 ## Related domains
 
-- **ID** (`open-mcp-panel`) — tenant and user scope for MCP calls.
+- **ID** (`dude-mcp-panel`) — tenant and user scope for MCP calls.
 - **Device** — enrollment and telemetry may overlap; prefer the registered source in `list_sources`.
 
 ## Authoritative docs
 
-See `Open MCP-Documents/` Infra and Server Management material when published.
+See `Dude MCP-Documents/` Infra and Server Management material when published.

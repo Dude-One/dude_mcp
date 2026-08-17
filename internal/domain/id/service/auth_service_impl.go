@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/open-mcp/open-mcp/internal/domain/id/entity"
-	"github.com/open-mcp/open-mcp/internal/domain/id/repository"
+	"github.com/Dude-One/dude_mcp/internal/domain/id/entity"
+	"github.com/Dude-One/dude_mcp/internal/domain/id/repository"
 )
 
 // AuthServiceImpl wires panel session and user repositories.

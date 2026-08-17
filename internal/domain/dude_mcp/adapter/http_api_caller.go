@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/entity"
+	"github.com/Dude-One/dude_mcp/internal/domain/dude_mcp/entity"
 )
 
 // HTTPAPICaller proxies HTTP calls to domain APIs.
@@ -46,7 +46,7 @@ func (c *HTTPAPICaller) Call(
 
 	// Inject user's session cookie for authenticated calls.
 	if sessionToken != "" {
-		req.AddCookie(&http.Cookie{Name: "open_mcp_session", Value: sessionToken})
+		req.AddCookie(&http.Cookie{Name: "dude_mcp_session", Value: sessionToken})
 	}
 
 	// Inject tenant scope header so the domain can enforce isolation.

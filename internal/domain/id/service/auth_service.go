@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/open-mcp/open-mcp/internal/domain/id/entity"
+	"github.com/Dude-One/dude_mcp/internal/domain/id/entity"
 )
 
 // AuthService is the application port for panel login and context notes.

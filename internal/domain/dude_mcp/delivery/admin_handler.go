@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/entity"
-	"github.com/open-mcp/open-mcp/internal/domain/open_mcp/repository"
+	"github.com/Dude-One/dude_mcp/internal/domain/dude_mcp/entity"
+	"github.com/Dude-One/dude_mcp/internal/domain/dude_mcp/repository"
 )
 
 // AdminSourceHandler handles admin CRUD for sources.

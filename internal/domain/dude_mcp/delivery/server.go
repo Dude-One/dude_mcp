@@ -9,7 +9,7 @@ import (
 // Each tool maps to one handler method — the LLM calls these by name.
 func NewMCPServer(h *Handlers) *server.MCPServer {
 	s := server.NewMCPServer(
-		"Open MCP",
+		"Dude MCP",
 		"1.0.0",
 		server.WithToolCapabilities(true),
 	)
@@ -17,7 +17,7 @@ func NewMCPServer(h *Handlers) *server.MCPServer {
 	// list_sources — what domains are registered?
 	s.AddTool(
 		mcp.NewTool("list_sources",
-			mcp.WithDescription("List all registered Open MCP domain sources (panel, infra, device, etc.). Call this first to discover what APIs and context docs are available."),
+			mcp.WithDescription("List all registered Dude MCP domain sources (panel, infra, device, etc.). Call this first to discover what APIs and context docs are available."),
 		),
 		h.HandleListSources,
 	)
@@ -28,7 +28,7 @@ func NewMCPServer(h *Handlers) *server.MCPServer {
 			mcp.WithDescription("Fetch the live OpenAPI/Swagger spec for a domain source. Use this to understand what endpoints are available before calling call_api."),
 			mcp.WithString("source",
 				mcp.Required(),
-				mcp.Description("Source name from list_sources, e.g. open-mcp-panel"),
+				mcp.Description("Source name from list_sources, e.g. dude-mcp-panel"),
 			),
 		),
 		h.HandleGetAPISpec,
@@ -40,7 +40,7 @@ func NewMCPServer(h *Handlers) *server.MCPServer {
 			mcp.WithDescription("List all available context doc paths for a domain source. Use this to discover what reference material is available."),
 			mcp.WithString("source",
 				mcp.Required(),
-				mcp.Description("Source name from list_sources, e.g. open-mcp-panel"),
+				mcp.Description("Source name from list_sources, e.g. dude-mcp-panel"),
 			),
 		),
 		h.HandleListContextDocs,
@@ -52,7 +52,7 @@ func NewMCPServer(h *Handlers) *server.MCPServer {
 			mcp.WithDescription("Read the content of a context doc from a domain source. Use this to understand domain concepts before making API calls."),
 			mcp.WithString("source",
 				mcp.Required(),
-				mcp.Description("Source name from list_sources, e.g. open-mcp-panel"),
+				mcp.Description("Source name from list_sources, e.g. dude-mcp-panel"),
 			),
 			mcp.WithString("path",
 				mcp.Required(),
@@ -68,7 +68,7 @@ func NewMCPServer(h *Handlers) *server.MCPServer {
 			mcp.WithDescription("Call a domain API endpoint. Supports GET, HEAD, POST, PUT, PATCH, DELETE. Always call get_api_spec first to know the available endpoints and required request bodies."),
 			mcp.WithString("source",
 				mcp.Required(),
-				mcp.Description("Source name from list_sources, e.g. open-mcp-agentless"),
+				mcp.Description("Source name from list_sources, e.g. dude-mcp-agentless"),
 			),
 			mcp.WithString("method",
 				mcp.Required(),
